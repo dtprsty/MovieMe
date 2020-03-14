@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/root"
+    android:orientation="vertical"
+    tools:context=".feature.detail.DetailMovieActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="1dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:contentInsetStartWithNavigation="0dp" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/_140sdp"
+            android:layout_height="@dimen/_180sdp"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="@dimen/_4sdp"
+            app:cardElevation="@dimen/_4sdp"
+            app:cardMaxElevation="@dimen/_4sdp"
+            app:cardUseCompatPadding="true"
+            app:layout_anchor="@+id/backdrop"
+            app:layout_anchorGravity="bottom|left|end">
+
+            <ImageView
+                android:id="@+id/ivPoster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_placeholder"
+                app:layout_anchor="@id/backdrop"
+                tools:ignore="ContentDescription" />
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/rootView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+
+                <ImageView
+                    android:id="@+id/ivBackdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_placeholder"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="@dimen/_170sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:ellipsize="none"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="6dp"
+                        android:scrollHorizontally="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_16ssp"
+                        android:textStyle="bold"
+                        tools:text="@string/movie_title_placeholder" />
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="13dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12ssp"
+                        tools:text="@string/movie_year_placeholder" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="170dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginBottom="6dp"
+                                android:src="@mipmap/ic_rating"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="1dp"
+                                android:text="@string/rating"
+                                android:textSize="@dimen/_12ssp" />
+
+                            <TextView
+                                android:id="@+id/tvRatings"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/movie_rating_placeholder"
+                                android:textSize="@dimen/_14ssp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginBottom="6dp"
+                                android:src="@mipmap/ic_vote"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="1dp"
+                                android:text="@string/voter"
+                                android:textSize="@dimen/_12ssp" />
+
+                            <TextView
+                                android:id="@+id/tvVoter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/voter_placeholder"
+                                android:textSize="@dimen/_14ssp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvOverview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_margin="10dp"
+                        android:background="@color/black200" />
+
+                    <TextView
+                        android:id="@+id/tvReview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_marginEnd="10dp"
+                        android:ellipsize="none"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="6dp"
+                        android:scrollHorizontally="false"
+                        android:text="@string/reviews"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_16ssp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvReview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_review" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/black100" />
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spinkit"
+                style="@style/SpinKitView.ThreeBounce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:SpinKit_Color="#52BA9B"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_toRightOf="@+id/spinkit"
+                android:text="@string/loading"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/spinkit"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</LinearLayout>
+

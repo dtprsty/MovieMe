@@ -1,0 +1,108 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "id.dtprsty.movieme"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        File secretsExists = new File("secrets.properties")
+        if (secretsExists.exists()) {
+            def secretsFile = rootProject.file('secrets.properties')
+            def secrets = new Properties()
+            secrets.load(new FileInputStream(secretsFile))
+            buildConfigField "String", "API_KEY", secrets.getProperty("API_KEY")
+        }
+
+        buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+        buildConfigField "String", "IMAGE_URL", "\"https://image.tmdb.org/t/p/w500/\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.appcompat:appcompat:$appCompat_version"
+    implementation "androidx.core:core-ktx:$core_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout_version"
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    //mockito
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+
+    implementation "androidx.recyclerview:recyclerview:$recyclerView_version"
+    implementation "com.google.android.material:material:$material_version"
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    implementation "com.github.florent37:glidepalette:$glide_palette_version"
+
+    //sdp ssp
+    implementation "com.intuit.sdp:sdp-android:$sdp_ssp_version"
+    implementation "com.intuit.ssp:ssp-android:$sdp_ssp_version"
+
+    //anko
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+
+    //View Model
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$archLifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycle_version"
+
+    //Loading
+    implementation "com.github.ybq:Android-SpinKit:$spinkit_version"
+
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    //Groupie Recyclerview
+    implementation "com.xwray:groupie:$groupie_version"
+    implementation "com.xwray:groupie-databinding:$groupie_version"
+    implementation "com.xwray:groupie-kotlin-android-extensions:$groupie_version"
+
+    //Timber for logging
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    //room
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
+
+}

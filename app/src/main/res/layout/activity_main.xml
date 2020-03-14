@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".feature.main.MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHighlight"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_highlight" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            style="@style/Widget.AppCompat.Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/dropdownListPreferredItemHeight"
+            android:layout_margin="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/spinner_background"
+            android:dropDownWidth="match_parent"
+            android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+            android:paddingRight="14dp"
+            android:popupBackground="@android:color/white"
+            android:popupElevation="3dp"
+            android:stateListAnimator="@drawable/spinner_animation" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/progressBar"
+                style="@style/SpinKitView.Large.ChasingDots"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="32dp"
+                android:visibility="gone"
+                app:SpinKit_Color="#52BA9B" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMovie"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/item_movie" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

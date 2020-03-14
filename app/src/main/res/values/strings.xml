@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MovieMe</string>
+    <string name="movie_title_placeholder">Spiderman</string>
+    <string name="movie_year_placeholder">2020</string>
+    <string name="movie_rating_placeholder">9.9</string>
+    <string name="voter">Voter</string>
+    <string name="see_movie_reviews">See Movie Reviews</string>
+    <string name="rating">Rating</string>
+    <string name="select_category">Select Category</string>
+    <string name="favorites">Favorite</string>
+    <string name="loading">Loading...</string>
+    <string name="voter_placeholder">954</string>
+    <string name="author_placeholder">Dwi Teguh Prasetyo</string>
+    <string name="content_placeholder">Good Film!</string>
+    <string name="reviews">Review</string>
+
+    <string-array name="movie_category">
+        <item>Now Playing</item>
+        <item>Upcoming</item>
+        <item>Most Popular</item>
+        <item>Favorit</item>
+    </string-array>
+</resources>
