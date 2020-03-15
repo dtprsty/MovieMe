@@ -1,8 +1,6 @@
 package id.dtprsty.movieme.feature.main
 
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import id.dtprsty.movieme.BuildConfig
 import id.dtprsty.movieme.data.MovieRepository
 import id.dtprsty.movieme.data.local.FavoriteMovie
@@ -15,10 +13,10 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
