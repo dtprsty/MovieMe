@@ -74,13 +74,6 @@ class MainActivityTest{
         Espresso.onView(ViewMatchers.withId(spinner)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withText("Favorit")).perform(ViewActions.click())
         Thread.sleep(7000)
-        Espresso.onView(ViewMatchers.withId(nestedScrollview)).perform(ViewActions.swipeUp(), ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(rvMovie))
-            .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
-        Espresso.onView(ViewMatchers.withId(rvMovie)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(8))
-        Espresso.onView(ViewMatchers.withId(rvMovie)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(8, ViewActions.click()))
-        Thread.sleep(4000)
         Espresso.pressBack()
     }
 }
