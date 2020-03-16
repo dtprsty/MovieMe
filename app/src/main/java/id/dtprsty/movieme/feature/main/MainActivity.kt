@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         setSpinner()
         showLoading(true)
-        viewModel.getMovies(0)
         viewModel.getMovies(2)
 
         subscribe()
@@ -55,11 +54,12 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
             onFlingListener = null
             setItemTransformer(
                 ScaleTransformer.Builder()
-                .setMaxScale(1.05f)
-                .setMinScale(0.8f)
-                .setPivotX(Pivot.X.CENTER)
-                .setPivotY(Pivot.Y.BOTTOM)
-                .build())
+                    .setMaxScale(1.05f)
+                    .setMinScale(0.8f)
+                    .setPivotX(Pivot.X.CENTER)
+                    .setPivotY(Pivot.Y.BOTTOM)
+                    .build()
+            )
 
         }
 
@@ -83,15 +83,16 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
             it?.listMovie?.map {
                 groupMovie.add(MovieItem(it, this@MainActivity))
             }
-            movieList()
             showLoading(false)
+            movieList()
         })
 
         viewModel.movieHighlight.observe(this, Observer {
             groupHighlight.clear()
-            for(i in 0 until 3){
+            for (i in 0 until 3) {
                 groupHighlight.add(MovieHighlight(it.listMovie[i]))
             }
+            viewModel.getMovies(spinner.selectedItemPosition)
             highlightList()
         })
 
@@ -102,10 +103,18 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
         })
 
         viewModel.movieFavorite.observe(this, Observer {
-            if(spinner.selectedItemPosition == 3 && !it.isNullOrEmpty()){
-                for(i in it.indices){
-                    val movie = Movie(id = it[i].id, voteCount = it[i].voteCount, poster = it[i].poster, backdrop = it[i].backdrop, title = it[i].title,
-                        rating = it[i].rating, overview = it[i].overview, releaseDate = it[i].releaseDate)
+            if (spinner.selectedItemPosition == 3 && !it.isNullOrEmpty()) {
+                for (i in it.indices) {
+                    val movie = Movie(
+                        id = it[i].id,
+                        voteCount = it[i].voteCount,
+                        poster = it[i].poster,
+                        backdrop = it[i].backdrop,
+                        title = it[i].title,
+                        rating = it[i].rating,
+                        overview = it[i].overview,
+                        releaseDate = it[i].releaseDate
+                    )
                     groupMovie.add(MovieItem(movie, this@MainActivity))
                 }
             }
@@ -117,10 +126,10 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             progressBar.visibility = View.VISIBLE
-            rvMovie.visibility = View.GONE
+            rootView.visibility = View.GONE
         } else {
             progressBar.visibility = View.GONE
-            rvMovie.visibility = View.VISIBLE
+            rootView.visibility = View.VISIBLE
         }
     }
 
@@ -141,10 +150,11 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
                 position: Int,
                 id: Long
             ) {
+                showLoading(true)
                 groupMovie.clear()
-                if(position == 3){
+                if (position == 3) {
                     viewModel.loadFavoriteMovie()
-                }else {
+                } else {
                     viewModel.getMovies(position)
                 }
             }
@@ -163,9 +173,9 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
         super.onResume()
         Timber.d("oResume")
         groupMovie.clear()
-        if(spinner.selectedItemPosition == 3){
+        if (spinner.selectedItemPosition == 3) {
             viewModel.loadFavoriteMovie()
-        }else {
+        } else {
             viewModel.getMovies(spinner.selectedItemPosition)
         }
     }
