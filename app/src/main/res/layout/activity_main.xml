@@ -13,13 +13,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.yarolegovich.discretescrollview.DiscreteScrollView
             android:id="@+id/rvHighlight"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_highlight" />
+            tools:listitem="@layout/item_highlight"
+            app:dsv_orientation="horizontal"/>
 
         <Spinner
             android:id="@+id/spinner"

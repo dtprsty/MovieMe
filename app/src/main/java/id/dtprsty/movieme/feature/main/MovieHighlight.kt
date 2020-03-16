@@ -31,7 +31,7 @@ class MovieHighlight(private val movie: Movie) : Item() {
             Resources.getSystem().displayMetrics
         val width = displayMetrics.widthPixels
         val params: ViewGroup.LayoutParams = viewHolder.itemView.layoutParams
-        params.width = width * 80 / 100
+        params.width = width * 70 / 100
         viewHolder.itemView.layoutParams = params
     }
 

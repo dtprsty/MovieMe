@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import com.yarolegovich.discretescrollview.transform.Pivot
+import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.feature.IRecyclerView
@@ -47,12 +49,21 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
 
     private fun highlightList() {
         with(rvHighlight) {
+            hasFixedSize()
             isNestedScrollingEnabled = false
             adapter = groupHighlight
             onFlingListener = null
+            setItemTransformer(
+                ScaleTransformer.Builder()
+                .setMaxScale(1.05f)
+                .setMinScale(0.8f)
+                .setPivotX(Pivot.X.CENTER)
+                .setPivotY(Pivot.Y.BOTTOM)
+                .build())
+
         }
-        groupMovie.notifyDataSetChanged()
-        SnapHelper().attachToRecyclerView(rvHighlight)
+
+        groupHighlight.notifyDataSetChanged()
     }
 
     private fun movieList() {
@@ -61,7 +72,9 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
             hasFixedSize()
             isNestedScrollingEnabled = false
             adapter = groupMovie
+            onFlingListener = null
         }
+        SnapHelper().attachToRecyclerView(rvMovie)
     }
 
     private fun subscribe() {
