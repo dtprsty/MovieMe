@@ -1,5 +1,7 @@
 package id.dtprsty.movieme.feature.main
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import id.dtprsty.movieme.BuildConfig
 import id.dtprsty.movieme.data.MovieRepository
@@ -16,6 +18,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
@@ -24,17 +27,28 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 import java.util.*
 
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(MockitoJUnitRunner.Silent::class)
 class MainViewModelTest {
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
     @Mock
     private lateinit var movieRepository: MovieRepository
+
+    @Mock
+    private lateinit var observer: Observer<MovieResponse>
+
+    @Mock
+    private lateinit var observerFavorit: Observer<MutableList<FavoriteMovie>>
+
     @Mock
     private lateinit var viewModel: MainViewModel
     @Mock
     private lateinit var apiService: ApiService
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
 
     @Before
     fun setUp(){
@@ -57,9 +71,12 @@ class MainViewModelTest {
             Mockito.`when`(movieRepository.getNowPlaying()).thenReturn(response)
             Mockito.`when`(apiService.getMovies(ArgumentMatchers.anyString(), Locale.getDefault().toString(), BuildConfig.API_KEY)).thenReturn(response)
 
-            Mockito.verify(movieRepository).getNowPlaying()
-            assertNotNull(viewModel.getMovies(0)) //Now Playing
-            assertEquals(40, viewModel.movieResponse.value?.listMovie?.size)
+            viewModel.movieResponse.observeForever(observer)
+            Mockito.verify(observer).onChanged(movieRepository.getNowPlaying())
+
+            val movies = viewModel.movieResponse.value
+            assertNotNull(movies)
+            assertEquals(movieRepository.getNowPlaying(), movies)
         }
     }
 
@@ -70,6 +87,9 @@ class MainViewModelTest {
             Mockito.`when`(movieRepository.movies()).thenReturn(favoriteMovie)
             Mockito.verify(movieRepository).movies()
             assertNotNull(viewModel.getMovies(3)) //Now Playing
+
+            viewModel.movieFavorite.observeForever(observerFavorit)
+            Mockito.verify(observerFavorit).onChanged(movieRepository.movies())
         }
 
     }
@@ -82,9 +102,12 @@ class MainViewModelTest {
         viewModel.viewModelScope.launch{
             Mockito.`when`(movieRepository.getPopular()).thenReturn(response)
             Mockito.`when`(apiService.getMovies(ArgumentMatchers.anyString(), Locale.getDefault().toString(), BuildConfig.API_KEY)).thenReturn(response)
-            assertNotNull(viewModel.getMovies(2)) //Now Playing
-            assertEquals(40, viewModel.movieResponse.value?.listMovie?.size)
-            Mockito.verify(movieRepository).getPopular()
+            viewModel.movieResponse.observeForever(observer)
+            Mockito.verify(observer).onChanged(movieRepository.getPopular())
+
+            val movies = viewModel.movieResponse.value
+            assertNotNull(movies)
+            assertEquals(5, movies?.listMovie?.size)
         }
     }
 }

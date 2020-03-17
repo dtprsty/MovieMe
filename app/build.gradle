@@ -77,6 +77,8 @@ dependencies {
     //mockito
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.0.0'
     testImplementation 'org.mockito:mockito-inline:3.0.0'
+    testImplementation "androidx.arch.core:core-testing:$mockitoKotlinVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
 
     implementation "androidx.recyclerview:recyclerview:$recyclerView_version"
     implementation "com.google.android.material:material:$material_version"
