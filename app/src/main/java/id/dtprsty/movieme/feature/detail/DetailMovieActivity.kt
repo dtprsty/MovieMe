@@ -21,6 +21,7 @@ import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.util.DateConverter
+import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.requestGlideListener
 import id.dtprsty.movieme.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_detail_movie.*
@@ -53,7 +54,9 @@ class DetailMovieActivity : AppCompatActivity() {
         showLoading(true)
         val factory = ViewModelFactory.getInstance()
         viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
+        EspressoIdlingResource.increment()
         viewModel.getReview(movie.id ?: 0)
+        EspressoIdlingResource.increment()
         viewModel.getMovieLocalById(movie.id ?: 0)
         subscribe()
     }
@@ -140,6 +143,7 @@ class DetailMovieActivity : AppCompatActivity() {
 
     private fun addToFav() {
         if (favoriteMovie == null) {
+            EspressoIdlingResource.increment()
             favoriteMovie = FavoriteMovie(
                 movie.id, movie.voteCount, movie.poster, movie.backdrop, movie.title,
                 movie.rating, movie.overview, movie.releaseDate
@@ -158,6 +162,7 @@ class DetailMovieActivity : AppCompatActivity() {
 
     private fun removeFromFav() {
         if (favoriteMovie != null) {
+            EspressoIdlingResource.increment()
             viewModel.delete(movie.id ?: 0)
             val snackbar: Snackbar = Snackbar
                 .make(root, "Removed from Favorite", Snackbar.LENGTH_LONG)

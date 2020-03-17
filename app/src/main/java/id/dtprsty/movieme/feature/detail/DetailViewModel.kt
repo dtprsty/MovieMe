@@ -7,6 +7,7 @@ import com.bumptech.glide.load.HttpException
 import id.dtprsty.movieme.data.MovieRepository
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.review.ReviewResponse
+import id.dtprsty.movieme.util.EspressoIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -48,19 +49,23 @@ class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(
                     }
                 }
             }
+            EspressoIdlingResource.decrement()
         }
     }
 
     fun getMovieLocalById(movieId: Int) = viewModelScope.launch {
+        EspressoIdlingResource.decrement()
         movieLocal.postValue(movieRepository.movieById(movieId))
     }
 
     fun insert(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
+        EspressoIdlingResource.decrement()
         movieRepository.insert(favoriteMovie)
     }
 
 
     fun delete(movieId: Int) = viewModelScope.launch {
+        EspressoIdlingResource.decrement()
         movieRepository.deleteById(movieId)
     }
 

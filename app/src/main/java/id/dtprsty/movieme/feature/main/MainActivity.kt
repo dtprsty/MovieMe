@@ -1,6 +1,7 @@
 package id.dtprsty.movieme.feature.main
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -16,6 +17,7 @@ import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.feature.IRecyclerView
 import id.dtprsty.movieme.feature.detail.DetailMovieActivity
+import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.SnapHelper
 import id.dtprsty.movieme.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
@@ -89,10 +91,9 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
 
         viewModel.movieHighlight.observe(this, Observer {
             groupHighlight.clear()
-            for (i in 0 until 3) {
+            for (i in 0 until 5) {
                 groupHighlight.add(MovieHighlight(it.listMovie[i]))
             }
-            viewModel.getMovies(spinner.selectedItemPosition)
             highlightList()
         })
 
@@ -153,6 +154,7 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
                 showLoading(true)
                 groupMovie.clear()
                 if (position == 3) {
+                    EspressoIdlingResource.increment()
                     viewModel.loadFavoriteMovie()
                 } else {
                     viewModel.getMovies(position)
@@ -174,6 +176,7 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
         Timber.d("oResume")
         groupMovie.clear()
         if (spinner.selectedItemPosition == 3) {
+            EspressoIdlingResource.increment()
             viewModel.loadFavoriteMovie()
         } else {
             viewModel.getMovies(spinner.selectedItemPosition)

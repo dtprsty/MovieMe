@@ -8,6 +8,7 @@ import com.bumptech.glide.load.HttpException
 import id.dtprsty.movieme.data.MovieRepository
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.movie.MovieResponse
+import id.dtprsty.movieme.util.EspressoIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,6 +24,7 @@ class MainViewModel(private val movieRepository: MovieRepository) : ViewModel() 
     val error = MutableLiveData<String>()
 
     fun getMovies(position: Int){
+        EspressoIdlingResource.increment()
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 try {
@@ -55,6 +57,10 @@ class MainViewModel(private val movieRepository: MovieRepository) : ViewModel() 
                         }
                     }
                 }
+
+                if(!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow){
+                    EspressoIdlingResource.decrement()
+                }
             }
         }
     }
@@ -62,5 +68,8 @@ class MainViewModel(private val movieRepository: MovieRepository) : ViewModel() 
     fun loadFavoriteMovie() = viewModelScope.launch {
         val favoriteMovie = movieRepository.movies()
         movieFavorite.postValue(favoriteMovie)
+        if(!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow){
+            EspressoIdlingResource.decrement()
+        }
     }
 }
