@@ -75,7 +75,6 @@ class MainActivity : AppCompatActivity(), IRecyclerView {
             adapter = groupMovie
             onFlingListener = null
         }
-        SnapHelper().attachToRecyclerView(rvMovie)
     }
 
     private fun subscribe() {
