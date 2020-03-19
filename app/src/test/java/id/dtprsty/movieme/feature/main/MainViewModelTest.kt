@@ -1,5 +1,6 @@
 package id.dtprsty.movieme.feature.main
 
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
@@ -74,9 +75,9 @@ class MainViewModelTest {
             viewModel.movieResponse.observeForever(observer)
             Mockito.verify(observer).onChanged(movieRepository.getNowPlaying())
 
-            val movies = viewModel.movieResponse.value
-            assertNotNull(movies)
-            assertEquals(movieRepository.getNowPlaying(), movies)
+            val movie = viewModel.movieResponse.value
+            assertNotNull(movie)
+            assertEquals(movieRepository.getNowPlaying(), movie)
         }
     }
 
@@ -86,7 +87,7 @@ class MainViewModelTest {
         viewModel.viewModelScope.launch{
             Mockito.`when`(movieRepository.movies()).thenReturn(favoriteMovie)
             Mockito.verify(movieRepository).movies()
-            assertNotNull(viewModel.getMovies(3)) //Now Playing
+            assertNotNull(viewModel.getMovies(3)) //Favorite
 
             viewModel.movieFavorite.observeForever(observerFavorit)
             Mockito.verify(observerFavorit).onChanged(movieRepository.movies())
@@ -96,18 +97,18 @@ class MainViewModelTest {
 
     @Test
     fun getMovieHighlight() {
-        val movies: MutableList<Movie> = mutableListOf()
+        var movies: MutableList<Movie> = mutableListOf()
         val response = MovieResponse(movies)
 
         viewModel.viewModelScope.launch{
             Mockito.`when`(movieRepository.getPopular()).thenReturn(response)
             Mockito.`when`(apiService.getMovies(ArgumentMatchers.anyString(), Locale.getDefault().toString(), BuildConfig.API_KEY)).thenReturn(response)
-            viewModel.movieResponse.observeForever(observer)
+            viewModel.movieHighlight.observeForever(observer)
             Mockito.verify(observer).onChanged(movieRepository.getPopular())
 
-            val movies = viewModel.movieResponse.value
-            assertNotNull(movies)
-            assertEquals(5, movies?.listMovie?.size)
+            val movie = viewModel.movieHighlight.value
+            assertNotNull(movie)
+            assertEquals(movieRepository.getPopular(), movie?.listMovie?.size)
         }
     }
 }
