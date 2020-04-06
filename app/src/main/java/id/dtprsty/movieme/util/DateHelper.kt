@@ -5,7 +5,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-object DateConverter {
+object DateHelper {
 
     fun toSimpleString(dateString: String?): String {
         val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")

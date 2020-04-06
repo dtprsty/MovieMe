@@ -20,7 +20,7 @@ import id.dtprsty.movieme.BuildConfig
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.movie.Movie
-import id.dtprsty.movieme.util.DateConverter
+import id.dtprsty.movieme.util.DateHelper
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.requestGlideListener
 import id.dtprsty.movieme.viewmodel.ViewModelFactory
@@ -135,7 +135,7 @@ class DetailMovieActivity : AppCompatActivity() {
             .into(ivBackdrop)
 
         tvTitle.text = movie.title
-        tvDate.text = DateConverter.toSimpleString(movie.releaseDate)
+        tvDate.text = DateHelper.toSimpleString(movie.releaseDate)
         tvOverview.text = movie.overview
         tvRatings.text = movie.rating.toString()
         tvVoter.text = movie.voteCount
