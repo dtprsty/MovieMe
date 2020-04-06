@@ -18,10 +18,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest{
+class MovieActivityTest{
     @Rule
     @JvmField
-    var activityRule = ActivityTestRule(MainActivity::class.java)
+    var activityRule = ActivityTestRule(MovieActivity::class.java)
 
     @Before
     fun setUp(){
