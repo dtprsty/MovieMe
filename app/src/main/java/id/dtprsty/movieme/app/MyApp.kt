@@ -22,7 +22,7 @@ class MyApp : Application() {
         if (BuildConfig.DEBUG) Timber.plant(DebugTree())
     }
 
-    fun getMovieDao(): MovieDao{
+    fun getMovieDao(): MovieDao {
         return MovieDb.getInstance(this).movieDao()
     }
 

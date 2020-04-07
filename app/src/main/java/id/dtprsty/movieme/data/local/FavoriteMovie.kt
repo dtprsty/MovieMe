@@ -5,19 +5,19 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class FavoriteMovie (
+data class FavoriteMovie(
     @PrimaryKey(autoGenerate = false) var id: Int? = null,
     @ColumnInfo(name = "vote_count")
-    var voteCount: String?= null,
+    var voteCount: String? = null,
     @ColumnInfo(name = "poster_path")
-    var poster: String?= null,
+    var poster: String? = null,
     @ColumnInfo(name = "backdrop_path")
-    var backdrop: String?= null,
+    var backdrop: String? = null,
     @ColumnInfo(name = "title")
-    var title: String?= null,
+    var title: String? = null,
     @ColumnInfo(name = "vote_average")
     var rating: Double? = null,
-    @ColumnInfo(name =" overview")
+    @ColumnInfo(name = " overview")
     var overview: String? = null,
     @ColumnInfo(name = "release_date")
     var releaseDate: String?

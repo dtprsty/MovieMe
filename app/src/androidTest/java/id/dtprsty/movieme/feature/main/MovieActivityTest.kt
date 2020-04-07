@@ -18,44 +18,60 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class MovieActivityTest{
+class MovieActivityTest {
     @Rule
     @JvmField
     var activityRule = ActivityTestRule(MovieActivity::class.java)
 
     @Before
-    fun setUp(){
+    fun setUp() {
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getEspressoIdlingResource())
     }
 
     @Test
-    fun testAppBehaviour(){
+    fun testAppBehaviour() {
         Espresso.onView(ViewMatchers.withId(spinner))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(rvHighlight))
             .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
-        Espresso.onView(ViewMatchers.withId(rvHighlight)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(2))
+        Espresso.onView(ViewMatchers.withId(rvHighlight))
+            .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(2))
         Espresso.onView(ViewMatchers.withId(rvMovie))
             .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
-        Espresso.onView(ViewMatchers.withId(rvMovie)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
+        Espresso.onView(ViewMatchers.withId(rvMovie))
+            .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
         Espresso.onView(ViewMatchers.withId(rvMovie)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(10, ViewActions.click()))
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                10,
+                ViewActions.click()
+            )
+        )
         Espresso.pressBack()
         Espresso.onView(ViewMatchers.withId(spinner)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withText("Upcoming")).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(rvMovie))
             .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
-        Espresso.onView(ViewMatchers.withId(rvMovie)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(8))
+        Espresso.onView(ViewMatchers.withId(rvMovie))
+            .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(8))
         Espresso.onView(ViewMatchers.withId(rvMovie)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(8, ViewActions.click()))
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                8,
+                ViewActions.click()
+            )
+        )
         Espresso.pressBack()
         Espresso.onView(ViewMatchers.withId(spinner)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withText("Most Popular")).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(rvMovie))
             .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
-        Espresso.onView(ViewMatchers.withId(rvMovie)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(12))
+        Espresso.onView(ViewMatchers.withId(rvMovie))
+            .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(12))
         Espresso.onView(ViewMatchers.withId(rvMovie)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(12, ViewActions.click()))
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                12,
+                ViewActions.click()
+            )
+        )
         Espresso.onView(ViewMatchers.withId(add_to_favorite))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(add_to_favorite)).perform(ViewActions.click())
@@ -67,7 +83,7 @@ class MovieActivityTest{
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         IdlingRegistry.getInstance().unregister(EspressoIdlingResource.getEspressoIdlingResource())
     }
 }

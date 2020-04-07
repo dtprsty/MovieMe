@@ -1,6 +1,5 @@
 package id.dtprsty.movieme.feature.main
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
@@ -10,6 +9,7 @@ import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.ApiService
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.movie.MovieResponse
+import id.dtprsty.movieme.feature.movie.MovieViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
@@ -29,7 +29,7 @@ import org.mockito.junit.MockitoJUnitRunner
 import java.util.*
 
 @RunWith(MockitoJUnitRunner.Silent::class)
-class MainViewModelTest {
+class MovieViewModelTest {
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
@@ -43,7 +43,8 @@ class MainViewModelTest {
     private lateinit var observerFavorit: Observer<MutableList<FavoriteMovie>>
 
     @Mock
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MovieViewModel
+
     @Mock
     private lateinit var apiService: ApiService
 
@@ -52,13 +53,14 @@ class MainViewModelTest {
 
 
     @Before
-    fun setUp(){
-        viewModel = MainViewModel(movieRepository)
+    fun setUp() {
+        viewModel =
+            MovieViewModel(movieRepository)
         Dispatchers.setMain(mainThreadSurrogate)
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         Dispatchers.resetMain()
         mainThreadSurrogate.close()
     }
@@ -68,9 +70,15 @@ class MainViewModelTest {
         val movies: MutableList<Movie> = mutableListOf()
         val response = MovieResponse(movies)
 
-        viewModel.viewModelScope.launch{
+        viewModel.viewModelScope.launch {
             Mockito.`when`(movieRepository.getNowPlaying()).thenReturn(response)
-            Mockito.`when`(apiService.getMovies(ArgumentMatchers.anyString(), Locale.getDefault().toString(), BuildConfig.API_KEY)).thenReturn(response)
+            Mockito.`when`(
+                apiService.getMovies(
+                    ArgumentMatchers.anyString(),
+                    Locale.getDefault().toString(),
+                    BuildConfig.API_KEY
+                )
+            ).thenReturn(response)
 
             viewModel.movieResponse.observeForever(observer)
             Mockito.verify(observer).onChanged(movieRepository.getNowPlaying())
@@ -84,7 +92,7 @@ class MainViewModelTest {
     @Test
     fun getMovieFavorite() {
         val favoriteMovie: MutableList<FavoriteMovie> = mutableListOf()
-        viewModel.viewModelScope.launch{
+        viewModel.viewModelScope.launch {
             Mockito.`when`(movieRepository.movies()).thenReturn(favoriteMovie)
             Mockito.verify(movieRepository).movies()
             assertNotNull(viewModel.getMovies(3)) //Favorite
@@ -100,9 +108,15 @@ class MainViewModelTest {
         var movies: MutableList<Movie> = mutableListOf()
         val response = MovieResponse(movies)
 
-        viewModel.viewModelScope.launch{
+        viewModel.viewModelScope.launch {
             Mockito.`when`(movieRepository.getPopular()).thenReturn(response)
-            Mockito.`when`(apiService.getMovies(ArgumentMatchers.anyString(), Locale.getDefault().toString(), BuildConfig.API_KEY)).thenReturn(response)
+            Mockito.`when`(
+                apiService.getMovies(
+                    ArgumentMatchers.anyString(),
+                    Locale.getDefault().toString(),
+                    BuildConfig.API_KEY
+                )
+            ).thenReturn(response)
             viewModel.movieHighlight.observeForever(observer)
             Mockito.verify(observer).onChanged(movieRepository.getPopular())
 

@@ -1,7 +1,5 @@
-package id.dtprsty.movieme.feature.main
+package id.dtprsty.movieme.feature
 
-import android.content.res.Resources
-import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -11,9 +9,9 @@ import id.dtprsty.movieme.BuildConfig
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.util.DateHelper
-import kotlinx.android.synthetic.main.item_highlight.*
+import kotlinx.android.synthetic.main.item_movie.*
 
-class MovieHighlight(private val movie: Movie) : Item() {
+class ContentItem(private val movie: Movie, private val listener: IRecyclerView) : Item() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.tvMovieTitle.text = movie.title
         viewHolder.tvYear.text = DateHelper.dateToYear(movie.releaseDate)
@@ -27,15 +25,12 @@ class MovieHighlight(private val movie: Movie) : Item() {
             )
             .into(viewHolder.ivBackdrop)
 
-        val displayMetrics =
-            Resources.getSystem().displayMetrics
-        val width = displayMetrics.widthPixels
-        val params: ViewGroup.LayoutParams = viewHolder.itemView.layoutParams
-        params.width = width * 70 / 100
-        viewHolder.itemView.layoutParams = params
+        viewHolder.cardMovie.setOnClickListener {
+            listener.onClick(movie)
+        }
     }
 
     override fun getLayout(): Int {
-        return R.layout.item_highlight
+        return R.layout.item_movie
     }
 }

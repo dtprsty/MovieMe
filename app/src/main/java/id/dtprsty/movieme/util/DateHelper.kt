@@ -10,9 +10,9 @@ object DateHelper {
     fun toSimpleString(dateString: String?): String {
         val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
         var date: Date? = null
-        try{
+        try {
             date = dateFormat.parse(dateString)
-        }catch (e: ParseException){
+        } catch (e: ParseException) {
             e.printStackTrace()
         }
         return SimpleDateFormat("E, dd MMM yyyy").format(date)
@@ -21,9 +21,9 @@ object DateHelper {
     fun dateToYear(dateString: String?): String {
         val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
         var date: Date? = null
-        try{
+        try {
             date = dateFormat.parse(dateString)
-        }catch (e: ParseException){
+        } catch (e: ParseException) {
             e.printStackTrace()
         }
         return SimpleDateFormat("yyyy").format(date)

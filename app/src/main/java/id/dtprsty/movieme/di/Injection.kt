@@ -9,7 +9,7 @@ object Injection {
         return MovieRepository.geInstance()
     }
 
-    fun provideMovieDao(context: Context): MovieDb{
+    fun provideMovieDao(context: Context): MovieDb {
         return MovieDb.getInstance(context)
     }
 }

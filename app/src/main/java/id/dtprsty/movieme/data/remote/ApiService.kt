@@ -14,13 +14,15 @@ interface ApiService {
     suspend fun getMovies(
         @Path("filtering") filtering: String,
         @Query("language") language: String,
-        @Query("api_key") apiKey: String): MovieResponse
+        @Query("api_key") apiKey: String
+    ): MovieResponse
 
     @GET("movie/{movie_id}/reviews")
     suspend fun getReview(
         @Path("movie_id") movieId: Int,
         @Query("language") language: String,
-        @Query("api_key") apiKey: String): ReviewResponse
+        @Query("api_key") apiKey: String
+    ): ReviewResponse
 
 }
 

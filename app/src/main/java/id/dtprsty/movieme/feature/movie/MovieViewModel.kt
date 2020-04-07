@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.main
+package id.dtprsty.movieme.feature.movie
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,20 +15,20 @@ import org.json.JSONException
 import timber.log.Timber
 import java.io.IOException
 
-class MainViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel() {
 
     val movieResponse = MutableLiveData<MovieResponse>()
     val movieFavorite = MutableLiveData<MutableList<FavoriteMovie>>()
     val movieHighlight = MutableLiveData<MovieResponse>()
     val error = MutableLiveData<String>()
 
-    fun getMovies(position: Int){
+    fun getMovies(position: Int) {
         EspressoIdlingResource.increment()
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 try {
                     var result: MovieResponse? = null
-                    when(position){
+                    when (position) {
                         0 -> result = movieRepository.getNowPlaying()
                         1 -> result = movieRepository.getUpcoming()
                         2 -> {
@@ -38,8 +38,8 @@ class MainViewModel(private val movieRepository: MovieRepository) : ViewModel() 
                     }
                     Timber.d("MOVIE RESPONSE $result")
                     movieResponse.postValue(result)
-                }catch (throwable: Throwable){
-                    when(throwable){
+                } catch (throwable: Throwable) {
+                    when (throwable) {
                         is IOException -> {
                             error.postValue("Network error")
                         }
@@ -51,13 +51,13 @@ class MainViewModel(private val movieRepository: MovieRepository) : ViewModel() 
                         is JSONException -> {
                             error.postValue("Invalid json format")
                         }
-                        else ->{
+                        else -> {
                             error.postValue("Unknown error")
                         }
                     }
                 }
 
-                if(!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow){
+                if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
                     EspressoIdlingResource.decrement()
                 }
             }
@@ -67,7 +67,7 @@ class MainViewModel(private val movieRepository: MovieRepository) : ViewModel() 
     fun loadFavoriteMovie() = viewModelScope.launch {
         val favoriteMovie = movieRepository.movies()
         movieFavorite.postValue(favoriteMovie)
-        if(!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow){
+        if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
             EspressoIdlingResource.decrement()
         }
     }

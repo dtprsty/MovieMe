@@ -1,11 +1,13 @@
-package id.dtprsty.movieme.feature.main
+package id.dtprsty.movieme.feature.movie
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.xwray.groupie.GroupAdapter
@@ -14,35 +16,51 @@ import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.remote.movie.Movie
+import id.dtprsty.movieme.feature.ContentItem
 import id.dtprsty.movieme.feature.IRecyclerView
 import id.dtprsty.movieme.feature.detail.DetailMovieActivity
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.viewmodel.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_movie.*
+import kotlinx.android.synthetic.main.fragment_movie.*
 import org.jetbrains.anko.startActivity
 import timber.log.Timber
 
-class MovieActivity : AppCompatActivity(), IRecyclerView {
+/**
+ * A simple [Fragment] subclass.
+ */
+class MovieFragment : Fragment(), IRecyclerView {
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MovieViewModel
 
     private var groupMovie = GroupAdapter<GroupieViewHolder>()
     private var groupHighlight = GroupAdapter<GroupieViewHolder>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie)
+    companion object {
+        fun newInstance() = MovieFragment()
+    }
 
-        init()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_movie, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        if (activity != null) {
+            init()
+        }
     }
 
     private fun init() {
         val factory = ViewModelFactory.getInstance()
-        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
         setSpinner()
         showLoading(true)
         viewModel.getMovies(2)
-
         subscribe()
     }
 
@@ -77,30 +95,39 @@ class MovieActivity : AppCompatActivity(), IRecyclerView {
     }
 
     private fun subscribe() {
-        viewModel.movieResponse.observe(this, Observer {
+        viewModel.movieResponse.observe(viewLifecycleOwner, Observer {
             Timber.d("MOVIE $it")
             it?.listMovie?.map {
-                groupMovie.add(MovieItem(it, this@MovieActivity))
+                groupMovie.add(
+                    ContentItem(
+                        it,
+                        this@MovieFragment
+                    )
+                )
             }
             showLoading(false)
             movieList()
         })
 
-        viewModel.movieHighlight.observe(this, Observer {
+        viewModel.movieHighlight.observe(viewLifecycleOwner, Observer {
             groupHighlight.clear()
             for (i in 0 until 5) {
-                groupHighlight.add(MovieHighlight(it.listMovie[i]))
+                groupHighlight.add(
+                    MovieHighlight(
+                        it.listMovie[i]
+                    )
+                )
             }
             highlightList()
         })
 
-        viewModel.error.observe(this, Observer {
+        viewModel.error.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         })
 
-        viewModel.movieFavorite.observe(this, Observer {
+        viewModel.movieFavorite.observe(viewLifecycleOwner, Observer {
             if (spinner.selectedItemPosition == 3 && !it.isNullOrEmpty()) {
                 for (i in it.indices) {
                     val movie = Movie(
@@ -113,7 +140,12 @@ class MovieActivity : AppCompatActivity(), IRecyclerView {
                         overview = it[i].overview,
                         releaseDate = it[i].releaseDate
                     )
-                    groupMovie.add(MovieItem(movie, this@MovieActivity))
+                    groupMovie.add(
+                        ContentItem(
+                            movie,
+                            this@MovieFragment
+                        )
+                    )
                 }
             }
             movieList()
@@ -134,11 +166,13 @@ class MovieActivity : AppCompatActivity(), IRecyclerView {
     private fun setSpinner() {
         val data = resources.getStringArray(R.array.movie_category)
 
-        val adapter = ArrayAdapter(
-            this,
-            R.layout.spinner_item_selected, data
-        )
-        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown)
+        val adapter =
+            ArrayAdapter(
+                requireContext(),
+                R.layout.spinner_item_selected, data
+            )
+
+        adapter?.setDropDownViewResource(R.layout.spinner_item_dropdown)
 
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -165,18 +199,6 @@ class MovieActivity : AppCompatActivity(), IRecyclerView {
     }
 
     override fun onClick(movie: Movie) {
-        startActivity<DetailMovieActivity>(DetailMovieActivity.EXTRA_MOVIE to movie)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("oResume")
-        groupMovie.clear()
-        if (spinner.selectedItemPosition == 3) {
-            EspressoIdlingResource.increment()
-            viewModel.loadFavoriteMovie()
-        } else {
-            viewModel.getMovies(spinner.selectedItemPosition)
-        }
+        context?.startActivity<DetailMovieActivity>(DetailMovieActivity.EXTRA_MOVIE to movie)
     }
 }

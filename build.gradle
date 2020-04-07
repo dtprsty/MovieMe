@@ -7,9 +7,11 @@ buildscript {
         archLifecycleVersion = '2.2.0-rc02'
         coreVersion = '1.2.0'
         compilesdkVersion = 29
+        coreKtxVersion = '1.2.0'
         constraintLayoutVersion = '1.1.3'
         discrete_scrollviewVersion = '1.4.9'
-        espressoVersion="3.2.0"
+        espressoVersion='3.2.0'
+        fragmentKtxVersion = '1.2.4'
         glideVersion = '4.10.0'
         glide_paletteVersion = '2.1.2'
         groupieVersion = '2.7.0'
@@ -20,7 +22,7 @@ buildscript {
         materialVersion = '1.0.0'
         recyclerViewVersion = '1.1.0'
         retrofitVersion = '2.7.2'
-        roomVersion = '2.2.4'
+        roomVersion = '2.2.5'
         sdp_sspVersion = '1.0.6'
         spinkitVersion = '1.4.0'
         timberVersion = '4.7.1'

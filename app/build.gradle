@@ -48,6 +48,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
@@ -59,6 +63,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -73,6 +78,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
+
+    //Android KTX
+    implementation "androidx.core:core-ktx:$coreKtxVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
+
+    //room
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
     //mockito
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.0.0'
@@ -115,9 +129,4 @@ dependencies {
 
     //Timber for logging
     implementation "com.jakewharton.timber:timber:$timberVersion"
-
-    //room
-    implementation "androidx.room:room-ktx:$roomVersion"
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
 }

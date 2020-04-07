@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".feature.main.MovieActivity">
+    tools:context=".feature.movie.MovieFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,8 +35,8 @@
             android:id="@+id/rvHighlight"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            tools:listitem="@layout/item_highlight"
-            app:dsv_orientation="horizontal"/>
+            app:dsv_orientation="horizontal"
+            tools:listitem="@layout/item_highlight" />
 
         <Spinner
             android:id="@+id/spinner"

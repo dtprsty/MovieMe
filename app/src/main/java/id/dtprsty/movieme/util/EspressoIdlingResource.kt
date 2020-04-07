@@ -7,15 +7,15 @@ object EspressoIdlingResource {
     private val RESOURCE: String? = "GLOBAL"
     private val espressoIdlingTestResource = CountingIdlingResource(RESOURCE)
 
-    fun increment(){
+    fun increment() {
         espressoIdlingTestResource.increment()
     }
 
-    fun decrement(){
+    fun decrement() {
         espressoIdlingTestResource.decrement()
     }
 
-    fun getEspressoIdlingResource(): IdlingResource{
+    fun getEspressoIdlingResource(): IdlingResource {
         return espressoIdlingTestResource
     }
 }

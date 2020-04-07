@@ -22,4 +22,4 @@ data class Movie(
     var overview: String? = null,
     @SerializedName("release_date")
     var releaseDate: String? = null
-): Parcelable
+) : Parcelable
