@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'koin'
+
 android {
     compileSdkVersion rootProject.ext.compilesdkVersion
     buildToolsVersion "29.0.2"
@@ -37,10 +39,6 @@ android {
 
     androidExtensions {
         experimental = true
-    }
-
-    dataBinding {
-        enabled = true
     }
 
     compileOptions {
@@ -129,4 +127,9 @@ dependencies {
 
     //Timber for logging
     implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    //Koin DI
+    implementation "org.koin:koin-android:$koinVersion"
+    implementation "org.koin:koin-androidx-scope:$koinVersion"
+    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 }
