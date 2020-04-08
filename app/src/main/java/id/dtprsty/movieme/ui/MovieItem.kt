@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature
+package id.dtprsty.movieme.ui
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -11,7 +11,7 @@ import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.util.DateHelper
 import kotlinx.android.synthetic.main.item_movie.*
 
-class ContentItem(private val movie: Movie, private val listener: IRecyclerView) : Item() {
+class MovieItem(private val movie: Movie, private val listener: IRecyclerView) : Item() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.tvMovieTitle.text = movie.title
         viewHolder.tvYear.text = DateHelper.dateToYear(movie.releaseDate)

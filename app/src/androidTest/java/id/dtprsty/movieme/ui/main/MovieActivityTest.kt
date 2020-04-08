@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.main
+package id.dtprsty.movieme.ui.main
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import id.dtprsty.movieme.R.id.*
+import id.dtprsty.movieme.ui.movie.MovieFragment
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import org.junit.After
 import org.junit.Before
@@ -21,7 +22,7 @@ import org.junit.runner.RunWith
 class MovieActivityTest {
     @Rule
     @JvmField
-    var activityRule = ActivityTestRule(MovieActivity::class.java)
+    var activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Before
     fun setUp() {

@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.main
+package id.dtprsty.movieme.ui.main
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,7 +9,8 @@ import androidx.fragment.app.commitNow
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import id.dtprsty.movieme.R
-import id.dtprsty.movieme.feature.movie.MovieFragment
+import id.dtprsty.movieme.ui.movie.MovieFragment
+import id.dtprsty.movieme.ui.tv_show.TvShowFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_movie.*
 
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                         return true
                     }
                     R.id.menu_tvshow -> {
+                        openFragment(TvShowFragment.newInstance(), "tv_show")
                         return true
                     }
                     R.id.menu_favorite -> {

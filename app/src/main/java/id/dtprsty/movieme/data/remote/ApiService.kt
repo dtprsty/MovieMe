@@ -25,11 +25,3 @@ interface ApiService {
     ): ReviewResponse
 
 }
-
-val myApi: ApiService by lazy {
-    Retrofit.Builder()
-        .baseUrl(BuildConfig.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(ApiService::class.java)
-}

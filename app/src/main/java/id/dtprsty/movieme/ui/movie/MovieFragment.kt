@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.movie
+package id.dtprsty.movieme.ui.movie
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,21 +9,18 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.remote.movie.Movie
-import id.dtprsty.movieme.feature.ContentItem
-import id.dtprsty.movieme.feature.IRecyclerView
-import id.dtprsty.movieme.feature.detail.DetailMovieActivity
-import id.dtprsty.movieme.util.EspressoIdlingResource
+import id.dtprsty.movieme.ui.MovieItem
+import id.dtprsty.movieme.ui.detail.DetailMovieActivity
 import id.dtprsty.movieme.util.LoadingState
-import id.dtprsty.movieme.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_movie.*
 import org.jetbrains.anko.startActivity
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
 /**
@@ -31,7 +28,7 @@ import timber.log.Timber
  */
 class MovieFragment : Fragment(), IRecyclerView {
 
-    private lateinit var viewModel: MovieViewModel
+    private val viewModel by sharedViewModel<MovieViewModel>()
 
     private var groupMovie = GroupAdapter<GroupieViewHolder>()
     private var groupHighlight = GroupAdapter<GroupieViewHolder>()
@@ -57,8 +54,6 @@ class MovieFragment : Fragment(), IRecyclerView {
     }
 
     private fun init() {
-        val factory = ViewModelFactory.getInstance()
-        viewModel = ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
         setSpinner()
         viewModel.getMovies(2)
         subscribe()
@@ -97,7 +92,7 @@ class MovieFragment : Fragment(), IRecyclerView {
             Timber.d("MOVIE $it")
             it?.listMovie?.map {
                 groupMovie.add(
-                    ContentItem(
+                    MovieItem(
                         it,
                         this@MovieFragment
                     )
@@ -110,7 +105,7 @@ class MovieFragment : Fragment(), IRecyclerView {
             groupHighlight.clear()
             for (i in 0 until 5) {
                 groupHighlight.add(
-                    MovieHighlight(
+                    MovieHighlightItem(
                         it.listMovie[i]
                     )
                 )
@@ -137,30 +132,6 @@ class MovieFragment : Fragment(), IRecyclerView {
                 }
             }
         })
-
-        viewModel.movieFavorite.observe(viewLifecycleOwner, Observer {
-            if (spinner.selectedItemPosition == 3 && !it.isNullOrEmpty()) {
-                for (i in it.indices) {
-                    val movie = Movie(
-                        id = it[i].id,
-                        voteCount = it[i].voteCount,
-                        poster = it[i].poster,
-                        backdrop = it[i].backdrop,
-                        title = it[i].title,
-                        rating = it[i].rating,
-                        overview = it[i].overview,
-                        releaseDate = it[i].releaseDate
-                    )
-                    groupMovie.add(
-                        ContentItem(
-                            movie,
-                            this@MovieFragment
-                        )
-                    )
-                }
-            }
-            movieList()
-        })
     }
 
     private fun setSpinner() {
@@ -183,12 +154,8 @@ class MovieFragment : Fragment(), IRecyclerView {
                 id: Long
             ) {
                 groupMovie.clear()
-                if (position == 3) {
-                    EspressoIdlingResource.increment()
-                    viewModel.loadFavoriteMovie()
-                } else {
-                    viewModel.getMovies(position)
-                }
+                viewModel.getMovies(position)
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -198,6 +165,14 @@ class MovieFragment : Fragment(), IRecyclerView {
     }
 
     override fun onClick(movie: Movie) {
-        context?.startActivity<DetailMovieActivity>(DetailMovieActivity.EXTRA_MOVIE to movie)
+        context?.startActivity<DetailMovieActivity>(
+            DetailMovieActivity.EXTRA_MOVIE to movie,
+            DetailMovieActivity.EXTRA_TYPE to "movie"
+        )
     }
+}
+
+
+interface IRecyclerView {
+    fun onClick(movie: Movie)
 }

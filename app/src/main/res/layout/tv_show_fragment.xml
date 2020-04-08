@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".ui.movie.MovieFragment">
+    tools:context=".ui.tv_show.TvShowFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -31,22 +31,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/most_popular"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold" />
-
-        <com.yarolegovich.discretescrollview.DiscreteScrollView
-            android:id="@+id/rvHighlight"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            app:dsv_orientation="horizontal"
-            tools:listitem="@layout/item_highlight" />
-
         <Spinner
             android:id="@+id/spinner"
             style="@style/Widget.AppCompat.Spinner"
@@ -65,7 +49,7 @@
             android:stateListAnimator="@drawable/spinner_animation" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMovie"
+            android:id="@+id/rvTvShow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

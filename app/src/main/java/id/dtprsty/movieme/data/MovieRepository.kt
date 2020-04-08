@@ -4,26 +4,10 @@ import id.dtprsty.movieme.BuildConfig
 import id.dtprsty.movieme.app.MyApp
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.ApiService
-import id.dtprsty.movieme.data.remote.myApi
 import id.dtprsty.movieme.util.Constant
 import java.util.*
 
-class MovieRepository {
-    private var apiService: ApiService =
-        myApi
-
-    companion object {
-        @Volatile
-        private var remoteRepository: MovieRepository? = null
-
-        fun geInstance(): MovieRepository {
-            return remoteRepository
-                ?: synchronized(this) {
-                    remoteRepository
-                        ?: MovieRepository()
-                }
-        }
-    }
+class MovieRepository(private val apiService: ApiService) {
 
     suspend fun getNowPlaying() = apiService.getMovies(
         Constant.NOW_PLAYING,

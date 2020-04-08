@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.main
+package id.dtprsty.movieme.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
@@ -9,7 +9,7 @@ import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.ApiService
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.movie.MovieResponse
-import id.dtprsty.movieme.feature.movie.MovieViewModel
+import id.dtprsty.movieme.ui.movie.MovieViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext

@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.detail
+package id.dtprsty.movieme.ui.detail
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +8,7 @@ import id.dtprsty.movieme.data.MovieRepository
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.review.ReviewResponse
 import id.dtprsty.movieme.util.EspressoIdlingResource
+import id.dtprsty.movieme.util.LoadingState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,13 +18,15 @@ import java.io.IOException
 
 class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel() {
     val reviewResponse = MutableLiveData<ReviewResponse>()
-    val error = MutableLiveData<String>()
+
+    val loadingState = MutableLiveData<LoadingState>()
 
     val movie = MutableLiveData<FavoriteMovie>()
 
     var movieLocal = MutableLiveData<FavoriteMovie>()
 
     fun getReview(movieId: Int) {
+        loadingState.postValue(LoadingState.LOADING)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -33,20 +36,23 @@ class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(
                 } catch (throwable: Throwable) {
                     when (throwable) {
                         is IOException -> {
-                            error.postValue("Network error")
+                            loadingState.postValue(LoadingState.error("Network error"))
                         }
                         is HttpException -> {
                             val code = throwable.statusCode
                             val errorResponse = throwable.message
-                            error.postValue("Error $code $errorResponse")
+                            loadingState.postValue(LoadingState.error("Error $code $errorResponse"))
                         }
                         is JSONException -> {
-                            error.postValue("Invalid json format")
+                            loadingState.postValue(LoadingState.error("Invalid json format"))
                         }
                         else -> {
-                            error.postValue("Unknown error")
+                            loadingState.postValue(LoadingState.error("Unknown error"))
                         }
                     }
+                }finally {
+
+                    loadingState.postValue(LoadingState.LOADED)
                 }
             }
             EspressoIdlingResource.decrement()

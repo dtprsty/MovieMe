@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.detail
+package id.dtprsty.movieme.ui.detail
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item

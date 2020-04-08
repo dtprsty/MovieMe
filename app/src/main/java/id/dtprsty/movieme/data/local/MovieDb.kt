@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import id.dtprsty.movieme.util.Constant
 
 
-@Database(entities = [FavoriteMovie::class], version = 2, exportSchema = false)
+@Database(entities = [FavoriteMovie::class], version = Constant.DB_VERSION, exportSchema = false)
 abstract class MovieDb : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 

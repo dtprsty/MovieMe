@@ -1,13 +1,13 @@
-package id.dtprsty.movieme.feature.detail
+package id.dtprsty.movieme.ui.detail
 
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -20,26 +20,33 @@ import id.dtprsty.movieme.BuildConfig
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.movie.Movie
+import id.dtprsty.movieme.data.remote.tvshow.TvShow
 import id.dtprsty.movieme.util.DateHelper
 import id.dtprsty.movieme.util.EspressoIdlingResource
+import id.dtprsty.movieme.util.LoadingState
 import id.dtprsty.movieme.util.requestGlideListener
-import id.dtprsty.movieme.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_detail_movie.*
+import kotlinx.android.synthetic.main.activity_detail_movie.rootView
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 
 class DetailMovieActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_MOVIE = "extra_movie"
+        const val EXTRA_TVSHOW = "extra_tvshow"
+        const val EXTRA_TYPE = "type" //Movie or TV Show
     }
 
-    private lateinit var viewModel: DetailViewModel
+    private val viewModel: DetailViewModel by viewModel()
     private var groupReview = GroupAdapter<GroupieViewHolder>()
 
     private var isFavorite = false
     private var menu: Menu? = null
     private var favoriteMovie: FavoriteMovie? = null
     private lateinit var movie: Movie
+    private lateinit var tvShow: TvShow
+    private lateinit var type: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +56,13 @@ class DetailMovieActivity : AppCompatActivity() {
 
     private fun init() {
         setToolbar()
-        movie = intent.getParcelableExtra(EXTRA_MOVIE)
+        type = intent.getStringExtra(EXTRA_TYPE)
+        if(type == "movie"){
+            movie = intent.getParcelableExtra(EXTRA_MOVIE)
+        }else if(type == "tv_show"){
+            tvShow = intent.getParcelableExtra(EXTRA_TVSHOW)
+        }
         setData(movie)
-        showLoading(true)
-        val factory = ViewModelFactory.getInstance()
-        viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
         EspressoIdlingResource.increment()
         viewModel.getReview(movie.id ?: 0)
         EspressoIdlingResource.increment()
@@ -73,7 +82,6 @@ class DetailMovieActivity : AppCompatActivity() {
             } else {
                 tvReview.visibility = View.VISIBLE
             }
-            showLoading(false)
         })
 
         viewModel.movieLocal.observe(this, Observer {
@@ -84,6 +92,28 @@ class DetailMovieActivity : AppCompatActivity() {
                     setFavorite(menu!!)
             }
             Timber.d("FAVORITE MOVIE $it")
+        })
+
+        viewModel.loadingState.observe(this, Observer {
+            if (it != null) {
+                when (it.status) {
+                    LoadingState.Status.RUNNING -> {
+                        loading.visibility = View.VISIBLE
+                        rootView.alpha = 0.2f
+                        ivPoster.alpha = 0.2f
+                    }
+                    LoadingState.Status.SUCCESS -> {
+                        loading.visibility = View.GONE
+                        rootView.alpha = 1.0f
+                        ivPoster.alpha = 1.0f
+                    }
+                    LoadingState.Status.FAILED -> Toast.makeText(
+                        this,
+                        it.msg,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         })
     }
 
@@ -135,7 +165,11 @@ class DetailMovieActivity : AppCompatActivity() {
             .into(ivBackdrop)
 
         tvTitle.text = movie.title
-        tvDate.text = DateHelper.toSimpleString(movie.releaseDate)
+        if(type == "movie") {
+            tvDate.text = DateHelper.toSimpleString(movie.releaseDate)
+        }else if(type == "tv_show"){
+            tvDate.text = DateHelper.toSimpleString(tvShow.firstAirDate)
+        }
         tvOverview.text = movie.overview
         tvRatings.text = movie.rating.toString()
         tvVoter.text = movie.voteCount
@@ -200,17 +234,5 @@ class DetailMovieActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            loading.visibility = View.VISIBLE
-            rootView.alpha = 0.2f
-            ivPoster.alpha = 0.2f
-        } else {
-            loading.visibility = View.GONE
-            rootView.alpha = 1.0f
-            ivPoster.alpha = 1.0f
-        }
     }
 }

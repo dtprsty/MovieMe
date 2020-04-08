@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.movie
+package id.dtprsty.movieme.ui.movie
 
 import android.content.res.Resources
 import android.view.ViewGroup
@@ -13,7 +13,7 @@ import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.util.DateHelper
 import kotlinx.android.synthetic.main.item_highlight.*
 
-class MovieHighlight(private val movie: Movie) : Item() {
+class MovieHighlightItem(private val movie: Movie) : Item() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.tvMovieTitle.text = movie.title
         viewHolder.tvYear.text = DateHelper.dateToYear(movie.releaseDate)

@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.feature.movie
+package id.dtprsty.movieme.ui.movie
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,16 +32,20 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
                 try {
                     var result: MovieResponse? = null
                     when (position) {
-                        0 -> result = movieRepository.getNowPlaying()
-                        1 -> result = movieRepository.getUpcoming()
+                        0 -> {
+                            result = movieRepository.getNowPlaying()
+                            movieResponse.postValue(result)
+                        }
+                        1 -> {
+                            result = movieRepository.getUpcoming()
+                            movieResponse.postValue(result)
+                        }
                         2 -> {
                             result = movieRepository.getPopular()
                             movieHighlight.postValue(result)
                         }
                     }
                     Timber.d("MOVIE RESPONSE $result")
-                    movieResponse.postValue(result)
-                    loadingState.postValue(LoadingState.LOADED)
                 } catch (throwable: Throwable) {
                     when (throwable) {
                         is IOException -> {
@@ -59,6 +63,8 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
                             loadingState.postValue(LoadingState.error("Unknown error"))
                         }
                     }
+                }finally {
+                    loadingState.postValue(LoadingState.LOADED)
                 }
 
                 if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
