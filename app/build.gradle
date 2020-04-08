@@ -18,6 +18,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
 
         File secretsExists = new File("secrets.properties")
         if (secretsExists.exists()) {
@@ -114,10 +116,11 @@ dependencies {
     //Loading
     implementation "com.github.ybq:Android-SpinKit:$spinkitVersion"
 
-    //Retrofit
+    //Networking
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpInterceptorVersion"
 
     //Groupie Recyclerview
     implementation "com.xwray:groupie:$groupieVersion"
@@ -132,4 +135,7 @@ dependencies {
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.koin:koin-androidx-scope:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
+
+    //MultiDex
+    implementation "androidx.multidex:multidex:$multidexVersion"
 }
