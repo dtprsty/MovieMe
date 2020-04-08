@@ -31,6 +31,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/most_popular"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
         <com.yarolegovich.discretescrollview.DiscreteScrollView
             android:id="@+id/rvHighlight"
             android:layout_width="match_parent"

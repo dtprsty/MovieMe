@@ -8,6 +8,7 @@ import id.dtprsty.movieme.data.MovieRepository
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.movie.MovieResponse
 import id.dtprsty.movieme.util.EspressoIdlingResource
+import id.dtprsty.movieme.util.LoadingState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,13 +18,15 @@ import java.io.IOException
 
 class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel() {
 
-    val movieResponse = MutableLiveData<MovieResponse>()
+    val loadingState = MutableLiveData<LoadingState>()
+
     val movieFavorite = MutableLiveData<MutableList<FavoriteMovie>>()
-    val movieHighlight = MutableLiveData<MovieResponse>()
-    val error = MutableLiveData<String>()
+    var movieResponse = MutableLiveData<MovieResponse>()
+    var movieHighlight = MutableLiveData<MovieResponse>()
 
     fun getMovies(position: Int) {
         EspressoIdlingResource.increment()
+        loadingState.postValue(LoadingState.LOADING)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -38,21 +41,22 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
                     }
                     Timber.d("MOVIE RESPONSE $result")
                     movieResponse.postValue(result)
+                    loadingState.postValue(LoadingState.LOADED)
                 } catch (throwable: Throwable) {
                     when (throwable) {
                         is IOException -> {
-                            error.postValue("Network error")
+                            loadingState.postValue(LoadingState.error("Network error"))
                         }
                         is HttpException -> {
                             val code = throwable.statusCode
                             val errorResponse = throwable.message
-                            error.postValue("Error $code $errorResponse")
+                            loadingState.postValue(LoadingState.error("Error $code $errorResponse"))
                         }
                         is JSONException -> {
-                            error.postValue("Invalid json format")
+                            loadingState.postValue(LoadingState.error("Invalid json format"))
                         }
                         else -> {
-                            error.postValue("Unknown error")
+                            loadingState.postValue(LoadingState.error("Unknown error"))
                         }
                     }
                 }
@@ -61,6 +65,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
                     EspressoIdlingResource.decrement()
                 }
             }
+
         }
     }
 

@@ -17,10 +17,9 @@
     <string-array name="movie_category">
         <item>Now Playing</item>
         <item>Upcoming</item>
-        <item>Most Popular</item>
-        <item>Favorit</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="most_popular">Most Popular</string>
 </resources>

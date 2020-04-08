@@ -20,6 +20,7 @@ import id.dtprsty.movieme.feature.ContentItem
 import id.dtprsty.movieme.feature.IRecyclerView
 import id.dtprsty.movieme.feature.detail.DetailMovieActivity
 import id.dtprsty.movieme.util.EspressoIdlingResource
+import id.dtprsty.movieme.util.LoadingState
 import id.dtprsty.movieme.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_movie.*
 import org.jetbrains.anko.startActivity
@@ -59,7 +60,6 @@ class MovieFragment : Fragment(), IRecyclerView {
         val factory = ViewModelFactory.getInstance()
         viewModel = ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
         setSpinner()
-        showLoading(true)
         viewModel.getMovies(2)
         subscribe()
     }
@@ -93,7 +93,7 @@ class MovieFragment : Fragment(), IRecyclerView {
     }
 
     private fun subscribe() {
-        viewModel.movieResponse.observe(viewLifecycleOwner, Observer {
+        viewModel.movieResponse?.observe(viewLifecycleOwner, Observer {
             Timber.d("MOVIE $it")
             it?.listMovie?.map {
                 groupMovie.add(
@@ -103,11 +103,10 @@ class MovieFragment : Fragment(), IRecyclerView {
                     )
                 )
             }
-            showLoading(false)
             movieList()
         })
 
-        viewModel.movieHighlight.observe(viewLifecycleOwner, Observer {
+        viewModel.movieHighlight?.observe(viewLifecycleOwner, Observer {
             groupHighlight.clear()
             for (i in 0 until 5) {
                 groupHighlight.add(
@@ -119,9 +118,23 @@ class MovieFragment : Fragment(), IRecyclerView {
             highlightList()
         })
 
-        viewModel.error.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                when (it.status) {
+                    LoadingState.Status.RUNNING -> {
+                        progressBar.visibility = View.VISIBLE
+                        rootView.visibility = View.GONE
+                    }
+                    LoadingState.Status.SUCCESS -> {
+                        progressBar.visibility = View.GONE
+                        rootView.visibility = View.VISIBLE
+                    }
+                    LoadingState.Status.FAILED -> Toast.makeText(
+                        context,
+                        it.msg,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         })
 
@@ -147,18 +160,7 @@ class MovieFragment : Fragment(), IRecyclerView {
                 }
             }
             movieList()
-            showLoading(false)
         })
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            progressBar.visibility = View.VISIBLE
-            rootView.visibility = View.GONE
-        } else {
-            progressBar.visibility = View.GONE
-            rootView.visibility = View.VISIBLE
-        }
     }
 
     private fun setSpinner() {
@@ -180,7 +182,6 @@ class MovieFragment : Fragment(), IRecyclerView {
                 position: Int,
                 id: Long
             ) {
-                showLoading(true)
                 groupMovie.clear()
                 if (position == 3) {
                     EspressoIdlingResource.increment()
