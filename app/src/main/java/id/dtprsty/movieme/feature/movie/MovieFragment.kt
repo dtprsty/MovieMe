@@ -78,9 +78,7 @@ class MovieFragment : Fragment(), IRecyclerView {
                     .setPivotY(Pivot.Y.BOTTOM)
                     .build()
             )
-
         }
-
         groupHighlight.notifyDataSetChanged()
     }
 
