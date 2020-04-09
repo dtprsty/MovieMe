@@ -44,6 +44,7 @@ class FavoriteFragment : Fragment(), IRecyclerView {
     private fun init() {
         subscribe()
         favoriteAdapter = FavoriteAdapter(data, this)
+        movieList()
     }
 
     private fun subscribe() {
@@ -66,7 +67,7 @@ class FavoriteFragment : Fragment(), IRecyclerView {
                     )
                 }
             }
-            movieList()
+            favoriteAdapter.notifyDataSetChanged()
         })
         viewModel.movieFavorite(Constant.TYPE_TVSHOW)
             .observe(viewLifecycleOwner, Observer { movie ->
@@ -88,14 +89,12 @@ class FavoriteFragment : Fragment(), IRecyclerView {
                         )
                     }
                 }
-                movieList()
+                favoriteAdapter.notifyDataSetChanged()
             })
     }
 
     private fun movieList() {
-        favoriteAdapter.notifyDataSetChanged()
-
-        val mLayoutManager = GridLayoutManager(requireActivity(), 2)
+        var mLayoutManager = GridLayoutManager(requireActivity(), 2)
         mLayoutManager.spanSizeLookup = object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when (data[position]) {

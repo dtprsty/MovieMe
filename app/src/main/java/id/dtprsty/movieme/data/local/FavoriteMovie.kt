@@ -1,10 +1,13 @@
 package id.dtprsty.movieme.data.local
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
 @Entity
+@Parcelize
 data class FavoriteMovie(
     @PrimaryKey(autoGenerate = false) var id: Int? = null,
     @ColumnInfo(name = "vote_count")
@@ -23,4 +26,4 @@ data class FavoriteMovie(
     var releaseDate: String?,
     @ColumnInfo(name = "type")
     var type: String?
-)
+): Parcelable

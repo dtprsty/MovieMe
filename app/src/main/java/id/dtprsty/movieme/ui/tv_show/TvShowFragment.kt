@@ -47,6 +47,7 @@ class TvShowFragment : Fragment(), IRecyclerView {
 
     private fun init() {
         setSpinner()
+        tvShowList()
         viewModel.getTvShow(0)
         subscribe()
     }
@@ -62,7 +63,7 @@ class TvShowFragment : Fragment(), IRecyclerView {
                     )
                 )
             }
-            tvShowList()
+            groupMovie.notifyDataSetChanged()
         })
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
@@ -87,7 +88,6 @@ class TvShowFragment : Fragment(), IRecyclerView {
     }
 
     private fun tvShowList() {
-        groupMovie.notifyDataSetChanged()
         with(rvTvShow) {
             hasFixedSize()
             isNestedScrollingEnabled = false

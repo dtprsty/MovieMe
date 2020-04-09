@@ -24,6 +24,11 @@
         <item>On The Air</item>
     </string-array>
 
+    <string-array name="favorite_category">
+        <item>Movie</item>
+        <item>TV Show</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="most_popular">Most Popular</string>

@@ -145,7 +145,7 @@
                                 android:id="@+id/tvRatings"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/movie_rating_placeholder"
+                                tools:text="@string/movie_rating_placeholder"
                                 android:textSize="@dimen/_14ssp"
                                 android:textStyle="bold" />
 
@@ -177,7 +177,7 @@
                                 android:id="@+id/tvVoter"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/voter_placeholder"
+                                tools:text="@string/voter_placeholder"
                                 android:textSize="@dimen/_14ssp"
                                 android:textStyle="bold" />
 
@@ -200,6 +200,7 @@
                         android:background="@color/black200" />
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tvReview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -39,7 +39,7 @@ class DetailMovieActivity : AppCompatActivity() {
     private var groupReview = GroupAdapter<GroupieViewHolder>()
 
     private var isFavorite = false
-    private lateinit var menu: Menu
+    private var menu: Menu? = null
     private var favoriteMovie: FavoriteMovie? = null
     private lateinit var movie: Movie
     private lateinit var tvShow: TvShow
@@ -61,10 +61,13 @@ class DetailMovieActivity : AppCompatActivity() {
             movie = intent.getParcelableExtra(EXTRA_MOVIE)
             viewModel.getMovieReview(movie.id ?: 0)
             movieFavorite = viewModel.getMovieLocalById(movie.id ?: 0)
+            tvReview.visibility = View.VISIBLE
         } else if (type == Constant.TYPE_TVSHOW) {
             tvShow = intent.getParcelableExtra(EXTRA_TVSHOW)
             movieFavorite = viewModel.getMovieLocalById(tvShow.id ?: 0)
-            tvReview.visibility = View.GONE
+        } else if (type == Constant.TYPE_FAVORITE) {
+            favoriteMovie = intent.getParcelableExtra(EXTRA_MOVIE)
+            isFavorite = true
         }
         subscribe()
         setData()
@@ -84,15 +87,17 @@ class DetailMovieActivity : AppCompatActivity() {
             }
         })
 
-        movieFavorite.observe(this, Observer {
-            if (it != null) {
-                favoriteMovie = it
-                isFavorite = true
-                if (menu != null)
-                    setFavorite(menu)
-            }
-            Timber.d("FAVORITE MOVIE $it")
-        })
+        if (type != Constant.TYPE_FAVORITE) {
+            movieFavorite.observe(this, Observer {
+                if (it != null) {
+                    favoriteMovie = it
+                    isFavorite = true
+                    if (menu != null)
+                        setFavorite(menu!!)
+                }
+                Timber.d("FAVORITE MOVIE $it")
+            })
+        }
 
         viewModel.loadingState.observe(this, Observer {
             if (it != null) {
@@ -201,6 +206,36 @@ class DetailMovieActivity : AppCompatActivity() {
             tvOverview.text = tvShow.overview
             tvRatings.text = tvShow.rating.toString()
             tvVoter.text = tvShow.voteCount
+        } else if (type == Constant.TYPE_FAVORITE) {
+            tvDate.text = DateHelper.toSimpleString(favoriteMovie?.releaseDate)
+            Glide.with(this)
+                .load("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
+                .listener(ivPoster.requestGlideListener())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                )
+                .into(ivPoster)
+
+            Glide.with(this)
+                .load("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}")
+                .listener(
+                    GlidePalette.with("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
+                        .use(BitmapPalette.Profile.VIBRANT)
+                        .intoBackground(toolbar)
+                        .crossfade(true)
+                )
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                )
+                .into(ivBackdrop)
+
+            tvTitle.text = favoriteMovie?.title
+            tvOverview.text = favoriteMovie?.overview
+            tvRatings.text = favoriteMovie?.rating.toString()
+            tvVoter.text = favoriteMovie?.voteCount
         }
 
     }
@@ -232,17 +267,15 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private fun removeFromFav() {
-        if (favoriteMovie != null) {
-            EspressoIdlingResource.increment()
-            viewModel.delete(movie.id ?: 0)
-            val snackbar: Snackbar = Snackbar
-                .make(root, "Removed from Favorite", Snackbar.LENGTH_LONG)
-            snackbar.show()
-            menu?.getItem(0)?.setIcon(R.drawable.ic_add_to_fav)
-            isFavorite = false
-            if (menu != null)
-                setFavorite(menu!!)
-        }
+        EspressoIdlingResource.increment()
+        viewModel.delete(favoriteMovie?.id ?: 0)
+        val snackbar: Snackbar = Snackbar
+            .make(root, "Removed from Favorite", Snackbar.LENGTH_LONG)
+        snackbar.show()
+        menu?.getItem(0)?.setIcon(R.drawable.ic_add_to_fav)
+        isFavorite = false
+        if (menu != null)
+            setFavorite(menu!!)
     }
 
     private fun setFavorite(menu: Menu) {

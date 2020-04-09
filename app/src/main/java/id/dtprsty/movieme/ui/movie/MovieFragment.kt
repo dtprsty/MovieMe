@@ -55,6 +55,8 @@ class MovieFragment : Fragment(), IRecyclerView {
 
     private fun init() {
         setSpinner()
+        movieList()
+        highlightList()
         viewModel.getMovies(2)
         subscribe()
     }
@@ -74,11 +76,9 @@ class MovieFragment : Fragment(), IRecyclerView {
                     .build()
             )
         }
-        groupHighlight.notifyDataSetChanged()
     }
 
     private fun movieList() {
-        groupMovie.notifyDataSetChanged()
         with(rvMovie) {
             hasFixedSize()
             isNestedScrollingEnabled = false
@@ -98,7 +98,7 @@ class MovieFragment : Fragment(), IRecyclerView {
                     )
                 )
             }
-            movieList()
+            groupMovie.notifyDataSetChanged()
         })
 
         viewModel.movieHighlight?.observe(viewLifecycleOwner, Observer {
@@ -110,7 +110,7 @@ class MovieFragment : Fragment(), IRecyclerView {
                     )
                 )
             }
-            highlightList()
+            groupHighlight.notifyDataSetChanged()
         })
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
