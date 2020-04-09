@@ -1,13 +1,13 @@
-package id.dtprsty.movieme.data
+package id.dtprsty.movieme.data.remote.review
 
 import id.dtprsty.movieme.BuildConfig
-import id.dtprsty.movieme.app.MyApp
 import id.dtprsty.movieme.data.local.FavoriteMovie
+import id.dtprsty.movieme.data.local.MovieDao
 import id.dtprsty.movieme.data.remote.ApiService
 import id.dtprsty.movieme.util.Constant
 import java.util.*
 
-class MovieRepository(private val apiService: ApiService) {
+class MovieRepository(private val apiService: ApiService, private val movieDao: MovieDao) {
 
     suspend fun getNowPlaying() = apiService.getMovies(
         Constant.NOW_PLAYING,
@@ -22,12 +22,12 @@ class MovieRepository(private val apiService: ApiService) {
         apiService.getMovies(Constant.POPULAR, Locale.getDefault().toString(), BuildConfig.API_KEY)
 
     suspend fun getReview(movieId: Int) =
-        apiService.getReview(movieId, Locale.getDefault().toString(), BuildConfig.API_KEY)
+        apiService.getMovieReview(movieId, Locale.getDefault().toString(), BuildConfig.API_KEY)
 
-    suspend fun movieById(movieId: Int) = MyApp.mInstance.getMovieDao().loadMoviewByIds(movieId)
-    suspend fun movies() = MyApp.mInstance.getMovieDao().loadAllMovie()
+    fun movieById(movieId: Int) = movieDao.loadMoviewByIds(movieId)
+    fun movies(type: String) = movieDao.loadAllMovie(type)
     suspend fun insert(favoriteMovie: FavoriteMovie) =
-        MyApp.mInstance.getMovieDao().insetMovie(favoriteMovie)
+        movieDao.insetMovie(favoriteMovie)
 
-    suspend fun deleteById(movieId: Int) = MyApp.mInstance.getMovieDao().delete(movieId)
+    suspend fun deleteById(movieId: Int) = movieDao.delete(movieId)
 }

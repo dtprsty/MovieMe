@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
-import id.dtprsty.movieme.data.MovieRepository
 import id.dtprsty.movieme.data.local.FavoriteMovie
+import id.dtprsty.movieme.data.remote.review.MovieRepository
 import id.dtprsty.movieme.data.remote.review.ReviewResponse
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.LoadingState
@@ -23,9 +23,8 @@ class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(
 
     val movie = MutableLiveData<FavoriteMovie>()
 
-    var movieLocal = MutableLiveData<FavoriteMovie>()
-
-    fun getReview(movieId: Int) {
+    fun getMovieReview(movieId: Int) {
+        EspressoIdlingResource.increment()
         loadingState.postValue(LoadingState.LOADING)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -50,7 +49,7 @@ class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(
                             loadingState.postValue(LoadingState.error("Unknown error"))
                         }
                     }
-                }finally {
+                } finally {
 
                     loadingState.postValue(LoadingState.LOADED)
                 }
@@ -59,10 +58,7 @@ class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(
         }
     }
 
-    fun getMovieLocalById(movieId: Int) = viewModelScope.launch {
-        EspressoIdlingResource.decrement()
-        movieLocal.postValue(movieRepository.movieById(movieId))
-    }
+    fun getMovieLocalById(movieId: Int) = movieRepository.movieById(movieId)
 
     fun insert(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
         EspressoIdlingResource.decrement()

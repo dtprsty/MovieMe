@@ -22,7 +22,7 @@ val networkModule = module {
             .build()
     }
 
-    single{
+    single {
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(get<OkHttpClient>())

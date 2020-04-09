@@ -10,7 +10,6 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import id.dtprsty.movieme.R.id.*
-import id.dtprsty.movieme.ui.movie.MovieFragment
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import org.junit.After
 import org.junit.Before

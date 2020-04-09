@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -21,12 +22,8 @@ import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.tvshow.TvShow
-import id.dtprsty.movieme.util.DateHelper
-import id.dtprsty.movieme.util.EspressoIdlingResource
-import id.dtprsty.movieme.util.LoadingState
-import id.dtprsty.movieme.util.requestGlideListener
+import id.dtprsty.movieme.util.*
 import kotlinx.android.synthetic.main.activity_detail_movie.*
-import kotlinx.android.synthetic.main.activity_detail_movie.rootView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -42,11 +39,13 @@ class DetailMovieActivity : AppCompatActivity() {
     private var groupReview = GroupAdapter<GroupieViewHolder>()
 
     private var isFavorite = false
-    private var menu: Menu? = null
+    private lateinit var menu: Menu
     private var favoriteMovie: FavoriteMovie? = null
     private lateinit var movie: Movie
     private lateinit var tvShow: TvShow
     private lateinit var type: String
+
+    private lateinit var movieFavorite: LiveData<FavoriteMovie>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,18 +55,19 @@ class DetailMovieActivity : AppCompatActivity() {
 
     private fun init() {
         setToolbar()
+        EspressoIdlingResource.increment()
         type = intent.getStringExtra(EXTRA_TYPE)
-        if(type == "movie"){
+        if (type == Constant.TYPE_MOVIE) {
             movie = intent.getParcelableExtra(EXTRA_MOVIE)
-        }else if(type == "tv_show"){
+            viewModel.getMovieReview(movie.id ?: 0)
+            movieFavorite = viewModel.getMovieLocalById(movie.id ?: 0)
+        } else if (type == Constant.TYPE_TVSHOW) {
             tvShow = intent.getParcelableExtra(EXTRA_TVSHOW)
+            movieFavorite = viewModel.getMovieLocalById(tvShow.id ?: 0)
+            tvReview.visibility = View.GONE
         }
-        setData(movie)
-        EspressoIdlingResource.increment()
-        viewModel.getReview(movie.id ?: 0)
-        EspressoIdlingResource.increment()
-        viewModel.getMovieLocalById(movie.id ?: 0)
         subscribe()
+        setData()
     }
 
     private fun subscribe() {
@@ -84,12 +84,12 @@ class DetailMovieActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.movieLocal.observe(this, Observer {
+        movieFavorite.observe(this, Observer {
             if (it != null) {
                 favoriteMovie = it
                 isFavorite = true
                 if (menu != null)
-                    setFavorite(menu!!)
+                    setFavorite(menu)
             }
             Timber.d("FAVORITE MOVIE $it")
         })
@@ -139,49 +139,86 @@ class DetailMovieActivity : AppCompatActivity() {
         }
     }
 
-    private fun setData(movie: Movie) {
-        Glide.with(this)
-            .load("${BuildConfig.IMAGE_URL}${movie.poster}")
-            .listener(ivPoster.requestGlideListener())
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .apply(
-                RequestOptions.placeholderOf(R.drawable.img_placeholder)
-            )
-            .into(ivPoster)
+    private fun setData() {
 
-        Glide.with(this)
-            .load("${BuildConfig.IMAGE_URL}${movie.backdrop}")
-            .listener(
-                GlidePalette.with("${BuildConfig.IMAGE_URL}${movie.poster}")
-                    .use(BitmapPalette.Profile.VIBRANT)
-                    .intoBackground(toolbar)
-                    .crossfade(true)
-            )
-            .centerCrop()
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .apply(
-                RequestOptions.placeholderOf(R.drawable.img_placeholder)
-            )
-            .into(ivBackdrop)
-
-        tvTitle.text = movie.title
-        if(type == "movie") {
+        if (type == Constant.TYPE_MOVIE) {
             tvDate.text = DateHelper.toSimpleString(movie.releaseDate)
-        }else if(type == "tv_show"){
+            Glide.with(this)
+                .load("${BuildConfig.IMAGE_URL}${movie.poster}")
+                .listener(ivPoster.requestGlideListener())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                )
+                .into(ivPoster)
+
+            Glide.with(this)
+                .load("${BuildConfig.IMAGE_URL}${movie.backdrop}")
+                .listener(
+                    GlidePalette.with("${BuildConfig.IMAGE_URL}${movie.poster}")
+                        .use(BitmapPalette.Profile.VIBRANT)
+                        .intoBackground(toolbar)
+                        .crossfade(true)
+                )
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                )
+                .into(ivBackdrop)
+
+            tvTitle.text = movie.title
+            tvOverview.text = movie.overview
+            tvRatings.text = movie.rating.toString()
+            tvVoter.text = movie.voteCount
+        } else if (type == Constant.TYPE_TVSHOW) {
             tvDate.text = DateHelper.toSimpleString(tvShow.firstAirDate)
+            Glide.with(this)
+                .load("${BuildConfig.IMAGE_URL}${tvShow.poster}")
+                .listener(ivPoster.requestGlideListener())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                )
+                .into(ivPoster)
+
+            Glide.with(this)
+                .load("${BuildConfig.IMAGE_URL}${tvShow.backdrop}")
+                .listener(
+                    GlidePalette.with("${BuildConfig.IMAGE_URL}${tvShow.poster}")
+                        .use(BitmapPalette.Profile.VIBRANT)
+                        .intoBackground(toolbar)
+                        .crossfade(true)
+                )
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                )
+                .into(ivBackdrop)
+
+            tvTitle.text = tvShow.title
+            tvOverview.text = tvShow.overview
+            tvRatings.text = tvShow.rating.toString()
+            tvVoter.text = tvShow.voteCount
         }
-        tvOverview.text = movie.overview
-        tvRatings.text = movie.rating.toString()
-        tvVoter.text = movie.voteCount
+
     }
 
     private fun addToFav() {
         if (favoriteMovie == null) {
             EspressoIdlingResource.increment()
-            favoriteMovie = FavoriteMovie(
-                movie.id, movie.voteCount, movie.poster, movie.backdrop, movie.title,
-                movie.rating, movie.overview, movie.releaseDate
-            )
+            if (type == Constant.TYPE_MOVIE) {
+                favoriteMovie = FavoriteMovie(
+                    movie.id, movie.voteCount, movie.poster, movie.backdrop, movie.title,
+                    movie.rating, movie.overview, movie.releaseDate, Constant.TYPE_MOVIE
+                )
+            } else if (type == Constant.TYPE_TVSHOW) {
+                favoriteMovie = FavoriteMovie(
+                    tvShow.id, tvShow.voteCount, tvShow.poster, tvShow.backdrop, tvShow.title,
+                    tvShow.rating, tvShow.overview, tvShow.firstAirDate, Constant.TYPE_TVSHOW
+                )
+            }
             viewModel.insert(favoriteMovie!!)
             val snackbar: Snackbar = Snackbar
                 .make(root, "Added To Favorite", Snackbar.LENGTH_LONG)
@@ -219,8 +256,8 @@ class DetailMovieActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val menuInflater = menuInflater
         menuInflater.inflate(R.menu.menu_detail, menu)
-        setFavorite(menu)
         this.menu = menu
+        setFavorite(menu)
         return super.onCreateOptionsMenu(menu)
     }
 

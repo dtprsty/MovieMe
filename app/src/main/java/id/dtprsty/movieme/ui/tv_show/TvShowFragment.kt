@@ -1,28 +1,31 @@
 package id.dtprsty.movieme.ui.tv_show
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-
 import id.dtprsty.movieme.R
-import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.tvshow.TvShow
 import id.dtprsty.movieme.ui.detail.DetailMovieActivity
+import id.dtprsty.movieme.util.Constant
 import id.dtprsty.movieme.util.EspressoIdlingResource
-import kotlinx.android.synthetic.main.fragment_movie.*
+import id.dtprsty.movieme.util.LoadingState
+import kotlinx.android.synthetic.main.tv_show_fragment.*
 import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 class TvShowFragment : Fragment(), IRecyclerView {
 
-    private val viewModel = sharedViewModel<TvShowViewModel>()
-    private var groupMovie = GroupAdapter<GroupieViewHolder>()
+    private val viewModel by sharedViewModel<TvShowViewModel>()
+    private val groupMovie = GroupAdapter<GroupieViewHolder>()
 
     companion object {
         fun newInstance() = TvShowFragment()
@@ -42,12 +45,55 @@ class TvShowFragment : Fragment(), IRecyclerView {
         }
     }
 
-    private fun init(){
+    private fun init() {
         setSpinner()
+        viewModel.getTvShow(0)
+        subscribe()
     }
 
-    private fun subscribe(){
+    private fun subscribe() {
+        viewModel.tvShowResponse?.observe(viewLifecycleOwner, Observer {
+            Timber.d("TV Show $it")
+            it?.listTvShow?.map {
+                groupMovie.add(
+                    TvShowItem(
+                        it,
+                        this@TvShowFragment
+                    )
+                )
+            }
+            tvShowList()
+        })
 
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                when (it.status) {
+                    LoadingState.Status.RUNNING -> {
+                        progressBar.visibility = View.VISIBLE
+                        rootView.visibility = View.GONE
+                    }
+                    LoadingState.Status.SUCCESS -> {
+                        progressBar.visibility = View.GONE
+                        rootView.visibility = View.VISIBLE
+                    }
+                    LoadingState.Status.FAILED -> Toast.makeText(
+                        context,
+                        it.msg,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+    }
+
+    private fun tvShowList() {
+        groupMovie.notifyDataSetChanged()
+        with(rvTvShow) {
+            hasFixedSize()
+            isNestedScrollingEnabled = false
+            adapter = groupMovie
+            onFlingListener = null
+        }
     }
 
 
@@ -71,12 +117,8 @@ class TvShowFragment : Fragment(), IRecyclerView {
                 id: Long
             ) {
                 groupMovie.clear()
-                if (position == 3) {
-                    EspressoIdlingResource.increment()
-                    //viewModel.loadFavoriteMovie()
-                } else {
-                    //viewModel.getMovies(position)
-                }
+                EspressoIdlingResource.increment()
+                viewModel.getTvShow(position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -86,7 +128,10 @@ class TvShowFragment : Fragment(), IRecyclerView {
     }
 
     override fun onClick(tvshow: TvShow) {
-        context?.startActivity<DetailMovieActivity>(DetailMovieActivity.EXTRA_MOVIE to tvshow, DetailMovieActivity.EXTRA_TYPE to "tv_show")
+        context?.startActivity<DetailMovieActivity>(
+            DetailMovieActivity.EXTRA_TVSHOW to tvshow,
+            DetailMovieActivity.EXTRA_TYPE to Constant.TYPE_TVSHOW
+        )
     }
 
 }

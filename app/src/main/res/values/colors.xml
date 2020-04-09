@@ -7,4 +7,6 @@
     <color name="black200">#30000000</color>
     <color name="gray">#b1acad</color>
     <color name="davy_grey">#1B232F</color>
+
+    <color name="color_green">#00CC99</color>
 </resources>

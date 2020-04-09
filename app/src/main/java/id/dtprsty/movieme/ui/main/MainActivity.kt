@@ -9,6 +9,7 @@ import androidx.fragment.app.commitNow
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import id.dtprsty.movieme.R
+import id.dtprsty.movieme.ui.favorite.FavoriteFragment
 import id.dtprsty.movieme.ui.movie.MovieFragment
 import id.dtprsty.movieme.ui.tv_show.TvShowFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                         return true
                     }
                     R.id.menu_favorite -> {
+                        openFragment(FavoriteFragment.newInstance(), "favorite")
                         return true
                     }
                 }

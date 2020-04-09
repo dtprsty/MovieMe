@@ -4,11 +4,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import id.dtprsty.movieme.BuildConfig
-import id.dtprsty.movieme.data.MovieRepository
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.ApiService
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.movie.MovieResponse
+import id.dtprsty.movieme.data.remote.review.MovieRepository
 import id.dtprsty.movieme.ui.movie.MovieViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

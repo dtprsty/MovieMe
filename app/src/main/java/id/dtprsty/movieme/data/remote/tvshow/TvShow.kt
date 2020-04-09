@@ -14,7 +14,7 @@ data class TvShow(
     var id: Int? = 0,
     @SerializedName("backdrop_path")
     var backdrop: String? = null,
-    @SerializedName("title")
+    @SerializedName("original_name")
     var title: String? = null,
     @SerializedName("vote_average")
     var rating: Double? = 0.0,

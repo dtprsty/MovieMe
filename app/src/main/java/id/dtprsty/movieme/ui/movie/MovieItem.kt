@@ -1,4 +1,4 @@
-package id.dtprsty.movieme.ui
+package id.dtprsty.movieme.ui.movie
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy

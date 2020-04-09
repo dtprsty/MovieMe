@@ -15,8 +15,8 @@ import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.remote.movie.Movie
-import id.dtprsty.movieme.ui.MovieItem
 import id.dtprsty.movieme.ui.detail.DetailMovieActivity
+import id.dtprsty.movieme.util.Constant
 import id.dtprsty.movieme.util.LoadingState
 import kotlinx.android.synthetic.main.fragment_movie.*
 import org.jetbrains.anko.startActivity
@@ -30,8 +30,8 @@ class MovieFragment : Fragment(), IRecyclerView {
 
     private val viewModel by sharedViewModel<MovieViewModel>()
 
-    private var groupMovie = GroupAdapter<GroupieViewHolder>()
-    private var groupHighlight = GroupAdapter<GroupieViewHolder>()
+    private val groupMovie = GroupAdapter<GroupieViewHolder>()
+    private val groupHighlight = GroupAdapter<GroupieViewHolder>()
 
     companion object {
         fun newInstance() = MovieFragment()
@@ -155,7 +155,6 @@ class MovieFragment : Fragment(), IRecyclerView {
             ) {
                 groupMovie.clear()
                 viewModel.getMovies(position)
-
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -167,7 +166,7 @@ class MovieFragment : Fragment(), IRecyclerView {
     override fun onClick(movie: Movie) {
         context?.startActivity<DetailMovieActivity>(
             DetailMovieActivity.EXTRA_MOVIE to movie,
-            DetailMovieActivity.EXTRA_TYPE to "movie"
+            DetailMovieActivity.EXTRA_TYPE to Constant.TYPE_MOVIE
         )
     }
 }

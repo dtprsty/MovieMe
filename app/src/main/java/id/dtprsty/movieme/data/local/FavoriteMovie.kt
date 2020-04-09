@@ -20,5 +20,7 @@ data class FavoriteMovie(
     @ColumnInfo(name = " overview")
     var overview: String? = null,
     @ColumnInfo(name = "release_date")
-    var releaseDate: String?
+    var releaseDate: String?,
+    @ColumnInfo(name = "type")
+    var type: String?
 )

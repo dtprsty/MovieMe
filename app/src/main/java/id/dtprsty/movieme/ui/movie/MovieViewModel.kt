@@ -4,9 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
-import id.dtprsty.movieme.data.MovieRepository
-import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.movie.MovieResponse
+import id.dtprsty.movieme.data.remote.review.MovieRepository
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.LoadingState
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +19,6 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
 
     val loadingState = MutableLiveData<LoadingState>()
 
-    val movieFavorite = MutableLiveData<MutableList<FavoriteMovie>>()
     var movieResponse = MutableLiveData<MovieResponse>()
     var movieHighlight = MutableLiveData<MovieResponse>()
 
@@ -63,7 +61,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
                             loadingState.postValue(LoadingState.error("Unknown error"))
                         }
                     }
-                }finally {
+                } finally {
                     loadingState.postValue(LoadingState.LOADED)
                 }
 
@@ -72,14 +70,6 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
                 }
             }
 
-        }
-    }
-
-    fun loadFavoriteMovie() = viewModelScope.launch {
-        val favoriteMovie = movieRepository.movies()
-        movieFavorite.postValue(favoriteMovie)
-        if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
-            EspressoIdlingResource.decrement()
         }
     }
 }
