@@ -44,7 +44,6 @@ class DetailMovieActivity : AppCompatActivity() {
     private lateinit var movie: Movie
     private lateinit var tvShow: TvShow
     private lateinit var type: String
-
     private lateinit var movieFavorite: LiveData<FavoriteMovie>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,9 +53,8 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        setToolbar()
-        EspressoIdlingResource.increment()
         type = intent.getStringExtra(EXTRA_TYPE)
+        setToolbar()
         if (type == Constant.TYPE_MOVIE) {
             movie = intent.getParcelableExtra(EXTRA_MOVIE)
             viewModel.getMovieReview(movie.id ?: 0)
@@ -132,8 +130,17 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     fun setToolbar() {
+        val title = if(type == Constant.TYPE_MOVIE){
+            "Movie Detail"
+        }else if(type == Constant.TYPE_TVSHOW){
+            "TV Show Detail"
+        }else if(type == Constant.TYPE_FAVORITE){
+            "Favorite Detail"
+        }else{
+            "Undefined"
+        }
         toolbar.apply {
-            title = "Movie Detail"
+            this.title = title
             setTitleTextColor(Color.WHITE)
         }
         setSupportActionBar(toolbar)
