@@ -17,11 +17,11 @@
         android:layout_marginBottom="8dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:spanCount="2"
         tools:listitem="@layout/item_movie" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
