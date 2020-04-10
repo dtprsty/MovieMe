@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.ui.detail.DetailMovieActivity
-import id.dtprsty.movieme.ui.movie.MovieViewModel
 import id.dtprsty.movieme.util.Constant
 import kotlinx.android.synthetic.main.favorite_fragment.*
 import org.jetbrains.anko.startActivity

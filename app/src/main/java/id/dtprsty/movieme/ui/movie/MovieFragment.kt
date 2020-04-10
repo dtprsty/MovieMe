@@ -106,7 +106,7 @@ class MovieFragment : Fragment(), IRecyclerView {
             for (i in 0 until 5) {
                 groupHighlight.add(
                     MovieHighlightItem(
-                        it.data[i]
+                        it.data?.get(i)
                     )
                 )
             }

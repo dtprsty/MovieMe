@@ -1,9 +1,5 @@
 package id.dtprsty.movieme.data.local
 
-import id.dtprsty.movieme.BuildConfig
-import id.dtprsty.movieme.data.remote.ApiService
-import java.util.*
-
 
 class FavoriteRepository(private val movieDao: MovieDao) {
 

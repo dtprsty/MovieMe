@@ -3,7 +3,6 @@ package id.dtprsty.movieme.ui.favorite
 import androidx.lifecycle.ViewModel
 import androidx.paging.toLiveData
 import id.dtprsty.movieme.data.local.FavoriteRepository
-import id.dtprsty.movieme.data.remote.movie.MovieRepository
 
 class FavoriteViewModel(private val repo: FavoriteRepository) : ViewModel() {
 

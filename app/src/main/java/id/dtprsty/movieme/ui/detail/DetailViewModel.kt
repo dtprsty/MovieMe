@@ -18,7 +18,10 @@ import org.json.JSONException
 import timber.log.Timber
 import java.io.IOException
 
-class DetailViewModel(private val favoriteRepository: FavoriteRepository, private val reviewRepository: ReviewRepository) : ViewModel() {
+class DetailViewModel(
+    private val favoriteRepository: FavoriteRepository,
+    private val reviewRepository: ReviewRepository
+) : ViewModel() {
     val reviewResponse = MutableLiveData<BaseResponse<MutableList<Review>>>()
 
     val loadingState = MutableLiveData<LoadingState>()

@@ -1,8 +1,6 @@
 package id.dtprsty.movieme.data.remote.movie
 
 import id.dtprsty.movieme.BuildConfig
-import id.dtprsty.movieme.data.local.FavoriteMovie
-import id.dtprsty.movieme.data.local.MovieDao
 import id.dtprsty.movieme.data.remote.ApiService
 import id.dtprsty.movieme.util.Constant
 import java.util.*

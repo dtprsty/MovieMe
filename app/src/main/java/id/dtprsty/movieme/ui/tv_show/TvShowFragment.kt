@@ -15,7 +15,6 @@ import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.remote.tvshow.TvShow
 import id.dtprsty.movieme.ui.detail.DetailMovieActivity
 import id.dtprsty.movieme.util.Constant
-import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.LoadingState
 import kotlinx.android.synthetic.main.tv_show_fragment.*
 import org.jetbrains.anko.startActivity
