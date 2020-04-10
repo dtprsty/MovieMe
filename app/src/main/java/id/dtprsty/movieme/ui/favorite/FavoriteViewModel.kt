@@ -1,8 +1,12 @@
 package id.dtprsty.movieme.ui.favorite
 
 import androidx.lifecycle.ViewModel
-import id.dtprsty.movieme.data.remote.review.MovieRepository
+import androidx.paging.toLiveData
+import id.dtprsty.movieme.data.local.FavoriteRepository
+import id.dtprsty.movieme.data.remote.movie.MovieRepository
 
-class FavoriteViewModel(private val movieRepository: MovieRepository) : ViewModel() {
-    fun movieFavorite(type: String) = movieRepository.movies(type)
+class FavoriteViewModel(private val repo: FavoriteRepository) : ViewModel() {
+
+    fun movieFavorite(type: String) =
+        repo.movies(type).toLiveData(20)
 }

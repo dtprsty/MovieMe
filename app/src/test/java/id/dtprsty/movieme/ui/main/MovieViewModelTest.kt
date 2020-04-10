@@ -8,7 +8,7 @@ import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.remote.ApiService
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.movie.MovieResponse
-import id.dtprsty.movieme.data.remote.review.MovieRepository
+import id.dtprsty.movieme.data.remote.movie.MovieRepository
 import id.dtprsty.movieme.ui.movie.MovieViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

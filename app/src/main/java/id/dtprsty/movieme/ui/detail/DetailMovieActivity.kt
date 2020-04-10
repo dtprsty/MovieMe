@@ -130,13 +130,13 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     fun setToolbar() {
-        val title = if(type == Constant.TYPE_MOVIE){
+        val title = if (type == Constant.TYPE_MOVIE) {
             "Movie Detail"
-        }else if(type == Constant.TYPE_TVSHOW){
+        } else if (type == Constant.TYPE_TVSHOW) {
             "TV Show Detail"
-        }else if(type == Constant.TYPE_FAVORITE){
+        } else if (type == Constant.TYPE_FAVORITE) {
             "Favorite Detail"
-        }else{
+        } else {
             "Undefined"
         }
         toolbar.apply {

@@ -37,7 +37,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/most_popular"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/color_green"
+            android:textSize="@dimen/_14ssp"
             android:textStyle="bold" />
 
         <com.yarolegovich.discretescrollview.DiscreteScrollView

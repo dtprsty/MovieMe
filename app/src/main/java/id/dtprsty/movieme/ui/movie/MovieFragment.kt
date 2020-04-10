@@ -55,13 +55,13 @@ class MovieFragment : Fragment(), IRecyclerView {
 
     private fun init() {
         setSpinner()
-        movieList()
-        highlightList()
+        setMovieRecyclerview()
+        setHighlightRecyclerview()
         viewModel.getMovies(2)
         subscribe()
     }
 
-    private fun highlightList() {
+    private fun setHighlightRecyclerview() {
         with(rvHighlight) {
             hasFixedSize()
             isNestedScrollingEnabled = false
@@ -78,7 +78,7 @@ class MovieFragment : Fragment(), IRecyclerView {
         }
     }
 
-    private fun movieList() {
+    private fun setMovieRecyclerview() {
         with(rvMovie) {
             hasFixedSize()
             isNestedScrollingEnabled = false

@@ -140,4 +140,7 @@ dependencies {
 
     //MultiDex
     implementation "androidx.multidex:multidex:$multidexVersion"
+
+    //Paging
+    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
 }

@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
 import id.dtprsty.movieme.data.remote.movie.MovieResponse
-import id.dtprsty.movieme.data.remote.review.MovieRepository
+import id.dtprsty.movieme.data.remote.movie.MovieRepository
+import id.dtprsty.movieme.data.remote.tvshow.TvShowResponse
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.LoadingState
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
 
     var movieResponse = MutableLiveData<MovieResponse>()
     var movieHighlight = MutableLiveData<MovieResponse>()
+    var tvShowResponse = MutableLiveData<TvShowResponse>()
 
     fun getMovies(position: Int) {
         EspressoIdlingResource.increment()

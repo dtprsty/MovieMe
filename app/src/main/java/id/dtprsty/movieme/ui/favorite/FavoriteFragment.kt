@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.ui.detail.DetailMovieActivity
+import id.dtprsty.movieme.ui.movie.MovieViewModel
 import id.dtprsty.movieme.util.Constant
 import kotlinx.android.synthetic.main.favorite_fragment.*
 import org.jetbrains.anko.startActivity
@@ -20,8 +21,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class FavoriteFragment : Fragment(), IRecyclerView {
 
     private lateinit var favoriteAdapter: FavoriteAdapter
-
-    private var data: MutableList<Any> = mutableListOf()
 
     companion object {
         fun newInstance() = FavoriteFragment()
@@ -42,75 +41,29 @@ class FavoriteFragment : Fragment(), IRecyclerView {
     }
 
     private fun init() {
+        viewModel.movieFavorite(Constant.TYPE_MOVIE)
         subscribe()
-        favoriteAdapter = FavoriteAdapter(data, this)
-        movieList()
+        setSpinner()
+        favoriteAdapter = FavoriteAdapter(this)
+        setRecyclerView()
     }
 
     private fun subscribe() {
-        viewModel.movieFavorite(Constant.TYPE_MOVIE).observe(viewLifecycleOwner, Observer { movie ->
-            if (movie != null) {
-                data.add("Movie")
-                movie.indices.forEach { i ->
-                    data.add(
-                        FavoriteMovie(
-                            movie[i].id,
-                            movie[i].voteCount,
-                            movie[i].poster,
-                            movie[i].backdrop,
-                            movie[i].title,
-                            movie[i].rating,
-                            movie[i].overview,
-                            movie[i].releaseDate,
-                            Constant.TYPE_MOVIE
-                        )
-                    )
+        viewModel.movieFavorite(Constant.TYPE_MOVIE)
+            .observe(viewLifecycleOwner, Observer { movieList ->
+                if (movieList != null) {
+                    favoriteAdapter.submitList(movieList)
+                    favoriteAdapter.notifyDataSetChanged()
                 }
-            }
-            favoriteAdapter.notifyDataSetChanged()
-        })
-        viewModel.movieFavorite(Constant.TYPE_TVSHOW)
-            .observe(viewLifecycleOwner, Observer { movie ->
-                if (movie != null) {
-                    data.add("TV Show")
-                    movie.indices.forEach { i ->
-                        data.add(
-                            FavoriteMovie(
-                                movie[i].id,
-                                movie[i].voteCount,
-                                movie[i].poster,
-                                movie[i].backdrop,
-                                movie[i].title,
-                                movie[i].rating,
-                                movie[i].overview,
-                                movie[i].releaseDate,
-                                Constant.TYPE_TVSHOW
-                            )
-                        )
-                    }
-                }
-                favoriteAdapter.notifyDataSetChanged()
             })
     }
 
-    private fun movieList() {
-        var mLayoutManager = GridLayoutManager(requireActivity(), 2)
-        mLayoutManager.spanSizeLookup = object : SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return when (data[position]) {
-                    is String -> 2
-                    is FavoriteMovie -> 1
-                    else -> throw IllegalArgumentException("Undefined view type")
-                }
-            }
-        }
-
+    private fun setRecyclerView() {
         with(rvMovie) {
             hasFixedSize()
             isNestedScrollingEnabled = false
             adapter = favoriteAdapter
             onFlingListener = null
-            layoutManager = mLayoutManager
         }
     }
 
@@ -119,6 +72,50 @@ class FavoriteFragment : Fragment(), IRecyclerView {
             DetailMovieActivity.EXTRA_MOVIE to favoriteMovie,
             DetailMovieActivity.EXTRA_TYPE to Constant.TYPE_FAVORITE
         )
+    }
+
+    fun setSpinner() {
+        val data = resources.getStringArray(R.array.favorite_category)
+
+        val adapter =
+            ArrayAdapter(
+                requireContext(),
+                R.layout.spinner_item_selected, data
+            )
+
+        adapter?.setDropDownViewResource(R.layout.spinner_item_dropdown)
+
+        spinner.adapter = adapter
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position == 0) {
+                    viewModel.movieFavorite(Constant.TYPE_MOVIE)
+                        .observe(viewLifecycleOwner, Observer { movieList ->
+                            if (movieList != null) {
+                                favoriteAdapter.submitList(movieList)
+                                favoriteAdapter.notifyDataSetChanged()
+                            }
+                        })
+                } else {
+                    viewModel.movieFavorite(Constant.TYPE_TVSHOW)
+                        .observe(viewLifecycleOwner, Observer { movieList ->
+                            if (movieList != null) {
+                                favoriteAdapter.submitList(movieList)
+                                favoriteAdapter.notifyDataSetChanged()
+                            }
+                        })
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
     }
 }
 

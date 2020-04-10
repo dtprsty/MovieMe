@@ -1,55 +1,72 @@
 package id.dtprsty.movieme.ui.favorite
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import id.dtprsty.movieme.BuildConfig
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.local.FavoriteMovie
+import id.dtprsty.movieme.util.DateHelper
+import kotlinx.android.synthetic.main.item_movie.view.*
 
-class FavoriteAdapter(private val data: List<Any>, private val listener: IRecyclerView) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FavoriteAdapter internal constructor(
+    private val listener: IRecyclerView
+) :
+    PagedListAdapter<FavoriteMovie, FavoriteAdapter.FavoriteViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        const val ITEM_HEADER = 0
-        const val ITEM_MOVIE = 1
-    }
+        private val DIFF_CALLBACK: DiffUtil.ItemCallback<FavoriteMovie> =
+            object : DiffUtil.ItemCallback<FavoriteMovie>() {
+                override fun areItemsTheSame(
+                    oldMovie: FavoriteMovie,
+                    newMovie: FavoriteMovie
+                ) = oldMovie.id == newMovie.id
 
 
-    override fun getItemViewType(position: Int): Int {
-        return when (data[position]) {
-            is String -> ITEM_HEADER
-            is FavoriteMovie -> ITEM_MOVIE
-            else -> throw IllegalArgumentException("Undefined view type")
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            ITEM_HEADER -> TitleItemViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_title, parent, false)
-            )
-            ITEM_MOVIE -> MovieItemHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false),
-                listener
-            )
-            else -> throw throw IllegalArgumentException("Undefined view type")
-        }
-    }
-
-    override fun getItemCount() = data.size
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder.itemViewType) {
-            ITEM_HEADER -> {
-                val headerHolder = holder as TitleItemViewHolder
-                headerHolder.bind(data[position] as String)
+                @SuppressLint("DiffUtilEquals")
+                override fun areContentsTheSame(
+                    oldMovie: FavoriteMovie,
+                    newMovie: FavoriteMovie
+                ) = oldMovie == newMovie
             }
-            ITEM_MOVIE -> {
-                val itemHolder = holder as MovieItemHolder
-                itemHolder.bind(data[position] as FavoriteMovie)
-            }
-            else -> throw IllegalArgumentException("Undefined view type")
-        }
     }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
+        return FavoriteViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
+        holder.bind(getItem(position) as FavoriteMovie)
+    }
+
+    inner class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(movie: FavoriteMovie) {
+            with(itemView) {
+                tvMovieTitle.text = movie.title
+                tvYear.text = DateHelper.dateToYear(movie.releaseDate)
+                Glide.with(itemView.context)
+                    .load("${BuildConfig.IMAGE_URL}${movie.backdrop}")
+                    .centerCrop()
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .apply(
+                        RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                    )
+                    .into(ivBackdrop)
+
+                cardMovie.setOnClickListener {
+                    listener.onClick(movie)
+                }
+            }
+        }
+
+    }
 }

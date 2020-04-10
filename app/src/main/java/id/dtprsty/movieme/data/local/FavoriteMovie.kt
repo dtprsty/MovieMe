@@ -26,4 +26,4 @@ data class FavoriteMovie(
     var releaseDate: String?,
     @ColumnInfo(name = "type")
     var type: String?
-): Parcelable
+) : Parcelable

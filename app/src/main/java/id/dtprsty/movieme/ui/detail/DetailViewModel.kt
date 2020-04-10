@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
 import id.dtprsty.movieme.data.local.FavoriteMovie
-import id.dtprsty.movieme.data.remote.review.MovieRepository
+import id.dtprsty.movieme.data.local.FavoriteRepository
+import id.dtprsty.movieme.data.remote.movie.MovieRepository
+import id.dtprsty.movieme.data.remote.review.ReviewRepository
 import id.dtprsty.movieme.data.remote.review.ReviewResponse
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.LoadingState
@@ -16,7 +18,7 @@ import org.json.JSONException
 import timber.log.Timber
 import java.io.IOException
 
-class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+class DetailViewModel(private val favoriteRepository: FavoriteRepository, private val reviewRepository: ReviewRepository) : ViewModel() {
     val reviewResponse = MutableLiveData<ReviewResponse>()
 
     val loadingState = MutableLiveData<LoadingState>()
@@ -29,7 +31,7 @@ class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val result = movieRepository.getReview(movieId)
+                    val result = reviewRepository.getReview(movieId)
                     Timber.d("Review RESPONSE $result")
                     reviewResponse.postValue(result)
                 } catch (throwable: Throwable) {
@@ -58,17 +60,17 @@ class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(
         }
     }
 
-    fun getMovieLocalById(movieId: Int) = movieRepository.movieById(movieId)
+    fun getMovieLocalById(movieId: Int) = favoriteRepository.movieById(movieId)
 
     fun insert(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
         EspressoIdlingResource.decrement()
-        movieRepository.insert(favoriteMovie)
+        favoriteRepository.insert(favoriteMovie)
     }
 
 
     fun delete(movieId: Int) = viewModelScope.launch {
         EspressoIdlingResource.decrement()
-        movieRepository.deleteById(movieId)
+        favoriteRepository.deleteById(movieId)
     }
 
 
