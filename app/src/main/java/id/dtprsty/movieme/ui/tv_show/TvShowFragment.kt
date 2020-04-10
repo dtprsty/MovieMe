@@ -55,7 +55,7 @@ class TvShowFragment : Fragment(), IRecyclerView {
     private fun subscribe() {
         viewModel.tvShowResponse?.observe(viewLifecycleOwner, Observer {
             Timber.d("TV Show $it")
-            it?.listTvShow?.map {
+            it?.data?.map {
                 groupMovie.add(
                     TvShowItem(
                         it,
@@ -117,7 +117,6 @@ class TvShowFragment : Fragment(), IRecyclerView {
                 id: Long
             ) {
                 groupMovie.clear()
-                EspressoIdlingResource.increment()
                 viewModel.getTvShow(position)
             }
 

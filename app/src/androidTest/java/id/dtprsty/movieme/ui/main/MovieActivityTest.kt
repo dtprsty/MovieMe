@@ -65,6 +65,22 @@ class MovieActivityTest {
         Espresso.onView(ViewMatchers.withText("Added To Favorite"))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.pressBack()
+
+        Espresso.onView(ViewMatchers.withId(navigation))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(ViewMatchers.withId(menu_tvshow)).perform(ViewActions.click())
+        Espresso.onView(ViewMatchers.withId(rvTvShow))
+            .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
+
+
+        Espresso.onView(ViewMatchers.withId(menu_favorite)).perform(ViewActions.click())
+
+        Espresso.onView(ViewMatchers.withId(rvMovie))
+            .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
+
+        Espresso.onView(ViewMatchers.withId(spinner)).perform(ViewActions.click())
+        Espresso.onView(ViewMatchers.withText("TV Show")).perform(ViewActions.click())
+
     }
 
     @After

@@ -74,11 +74,11 @@ class DetailMovieActivity : AppCompatActivity() {
     private fun subscribe() {
         viewModel.reviewResponse.observe(this, Observer {
             Timber.d("REVIEW $it")
-            it?.listReview?.map {
+            it?.data?.map {
                 groupReview.add(ReviewItem(it))
             }
             reviewList()
-            if (it.listReview.isNullOrEmpty()) {
+            if (it.data.isNullOrEmpty()) {
                 tvReview.visibility = View.GONE
             } else {
                 tvReview.visibility = View.VISIBLE

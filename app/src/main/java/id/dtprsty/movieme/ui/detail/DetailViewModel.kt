@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.local.FavoriteRepository
-import id.dtprsty.movieme.data.remote.movie.MovieRepository
+import id.dtprsty.movieme.data.remote.BaseResponse
+import id.dtprsty.movieme.data.remote.review.Review
 import id.dtprsty.movieme.data.remote.review.ReviewRepository
-import id.dtprsty.movieme.data.remote.review.ReviewResponse
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.LoadingState
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import timber.log.Timber
 import java.io.IOException
 
 class DetailViewModel(private val favoriteRepository: FavoriteRepository, private val reviewRepository: ReviewRepository) : ViewModel() {
-    val reviewResponse = MutableLiveData<ReviewResponse>()
+    val reviewResponse = MutableLiveData<BaseResponse<MutableList<Review>>>()
 
     val loadingState = MutableLiveData<LoadingState>()
 

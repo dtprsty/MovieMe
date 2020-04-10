@@ -4,8 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
+import id.dtprsty.movieme.data.remote.BaseResponse
+import id.dtprsty.movieme.data.remote.tvshow.TvShow
 import id.dtprsty.movieme.data.remote.tvshow.TvShowRepository
-import id.dtprsty.movieme.data.remote.tvshow.TvShowResponse
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.LoadingState
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,7 @@ import java.io.IOException
 class TvShowViewModel(private val tvShowRepository: TvShowRepository) : ViewModel() {
 
     val loadingState = MutableLiveData<LoadingState>()
-    var tvShowResponse = MutableLiveData<TvShowResponse>()
+    var tvShowResponse = MutableLiveData<BaseResponse<MutableList<TvShow>>>()
 
     fun getTvShow(position: Int) {
         EspressoIdlingResource.increment()
@@ -26,7 +27,7 @@ class TvShowViewModel(private val tvShowRepository: TvShowRepository) : ViewMode
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    var result: TvShowResponse? = null
+                    var result: BaseResponse<MutableList<TvShow>>? = null
                     when (position) {
                         0 -> result = tvShowRepository.getAiringToday()
                         1 -> result = tvShowRepository.getOnTheAir()

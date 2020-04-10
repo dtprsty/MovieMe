@@ -28,6 +28,7 @@ buildscript {
         retrofitVersion = '2.7.2'
         roomVersion = '2.2.5'
         sdp_sspVersion = '1.0.6'
+        spekVersion='2.0.10'
         spinkitVersion = '1.4.0'
         timberVersion = '4.7.1'
     }
@@ -39,6 +40,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.6.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.koin:koin-gradle-plugin:$koinVersion"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.5.1.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

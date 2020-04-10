@@ -90,7 +90,7 @@ class MovieFragment : Fragment(), IRecyclerView {
     private fun subscribe() {
         viewModel.movieResponse?.observe(viewLifecycleOwner, Observer {
             Timber.d("MOVIE $it")
-            it?.listMovie?.map {
+            it?.data?.map {
                 groupMovie.add(
                     MovieItem(
                         it,
@@ -106,7 +106,7 @@ class MovieFragment : Fragment(), IRecyclerView {
             for (i in 0 until 5) {
                 groupHighlight.add(
                     MovieHighlightItem(
-                        it.listMovie[i]
+                        it.data[i]
                     )
                 )
             }

@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'koin'
 
+apply plugin: "de.mannodermaus.android-junit5"
+
 android {
     compileSdkVersion rootProject.ext.compilesdkVersion
     buildToolsVersion "29.0.2"
@@ -54,6 +56,24 @@ android {
 
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
+    }
+
+    sourceSets.each {
+        it.java.srcDirs += "src/$it.name/kotlin"
+    }
+
+    testOptions {
+        junitPlatform {
+            filters {
+                engines {
+                    include 'spek2'
+                }
+            }
+        }
+
+        unitTests.all {
+            testLogging.events = ["passed", "skipped", "failed"]
+        }
     }
 }
 
@@ -143,4 +163,11 @@ dependencies {
 
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+
+    //Spek for unit testing
+    testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spekVersion"
+    testImplementation "org.spekframework.spek2:spek-runner-junit5:$spekVersion"
+
+    // spek requires kotlin-reflect, omit when already in classpath
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 }
