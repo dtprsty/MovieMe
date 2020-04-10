@@ -59,27 +59,12 @@ class MovieActivityTest {
                 ViewActions.click()
             )
         )
-        Espresso.pressBack()
-        Espresso.onView(ViewMatchers.withId(spinner)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withText("Most Popular")).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(rvMovie))
-            .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
-        Espresso.onView(ViewMatchers.withId(rvMovie))
-            .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(12))
-        Espresso.onView(ViewMatchers.withId(rvMovie)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                12,
-                ViewActions.click()
-            )
-        )
         Espresso.onView(ViewMatchers.withId(add_to_favorite))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(add_to_favorite)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withText("Added To Favorite"))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.pressBack()
-        Espresso.onView(ViewMatchers.withId(spinner)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withText("Favorit")).perform(ViewActions.click())
     }
 
     @After

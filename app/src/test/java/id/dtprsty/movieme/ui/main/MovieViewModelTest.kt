@@ -40,9 +40,6 @@ class MovieViewModelTest {
     private lateinit var observer: Observer<MovieResponse>
 
     @Mock
-    private lateinit var observerFavorit: Observer<MutableList<FavoriteMovie>>
-
-    @Mock
     private lateinit var viewModel: MovieViewModel
 
     @Mock
@@ -87,20 +84,6 @@ class MovieViewModelTest {
             assertNotNull(movie)
             assertEquals(movieRepository.getNowPlaying(), movie)
         }
-    }
-
-    @Test
-    fun getMovieFavorite() {
-        val favoriteMovie: MutableList<FavoriteMovie> = mutableListOf()
-        viewModel.viewModelScope.launch {
-            Mockito.`when`(movieRepository.movies()).thenReturn(favoriteMovie)
-            Mockito.verify(movieRepository).movies()
-            assertNotNull(viewModel.getMovies(3)) //Favorite
-
-            viewModel.movieFavorite.observeForever(observerFavorit)
-            Mockito.verify(observerFavorit).onChanged(movieRepository.movies())
-        }
-
     }
 
     @Test
