@@ -44,7 +44,7 @@
         <com.yarolegovich.discretescrollview.DiscreteScrollView
             android:id="@+id/rvHighlight"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="wrap_content"
             app:dsv_orientation="horizontal"
             tools:listitem="@layout/item_highlight" />
 
