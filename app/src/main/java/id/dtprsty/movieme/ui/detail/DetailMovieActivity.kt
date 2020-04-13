@@ -41,8 +41,8 @@ class DetailMovieActivity : AppCompatActivity() {
     private var isFavorite = false
     private var menu: Menu? = null
     private var favoriteMovie: FavoriteMovie? = null
-    private lateinit var movie: Movie
-    private lateinit var tvShow: TvShow
+    private var movie: Movie? = null
+    private var tvShow: TvShow? = null
     private lateinit var type: String
     private lateinit var movieFavorite: LiveData<FavoriteMovie>
 
@@ -57,12 +57,12 @@ class DetailMovieActivity : AppCompatActivity() {
         setToolbar()
         if (type == Constant.TYPE_MOVIE) {
             movie = intent.getParcelableExtra(EXTRA_MOVIE)
-            viewModel.getMovieReview(movie.id ?: 0)
-            movieFavorite = viewModel.getMovieLocalById(movie.id ?: 0)
+            viewModel.getMovieReview(movie?.id ?: 0)
+            movieFavorite = viewModel.getMovieLocalById(movie?.id ?: 0)
             tvReview.visibility = View.VISIBLE
         } else if (type == Constant.TYPE_TVSHOW) {
             tvShow = intent.getParcelableExtra(EXTRA_TVSHOW)
-            movieFavorite = viewModel.getMovieLocalById(tvShow.id ?: 0)
+            movieFavorite = viewModel.getMovieLocalById(tvShow?.id ?: 0)
         } else if (type == Constant.TYPE_FAVORITE) {
             favoriteMovie = intent.getParcelableExtra(EXTRA_MOVIE)
             isFavorite = true
@@ -154,9 +154,9 @@ class DetailMovieActivity : AppCompatActivity() {
     private fun setData() {
 
         if (type == Constant.TYPE_MOVIE) {
-            tvDate.text = DateHelper.toSimpleString(movie.releaseDate)
+            tvDate.text = DateHelper.toSimpleString(movie?.releaseDate)
             Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${movie.poster}")
+                .load("${BuildConfig.IMAGE_URL}${movie?.poster}")
                 .listener(ivPoster.requestGlideListener())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .apply(
@@ -165,9 +165,9 @@ class DetailMovieActivity : AppCompatActivity() {
                 .into(ivPoster)
 
             Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${movie.backdrop}")
+                .load("${BuildConfig.IMAGE_URL}${movie?.backdrop}")
                 .listener(
-                    GlidePalette.with("${BuildConfig.IMAGE_URL}${movie.poster}")
+                    GlidePalette.with("${BuildConfig.IMAGE_URL}${movie?.poster}")
                         .use(BitmapPalette.Profile.VIBRANT)
                         .intoBackground(toolbar)
                         .crossfade(true)
@@ -179,14 +179,14 @@ class DetailMovieActivity : AppCompatActivity() {
                 )
                 .into(ivBackdrop)
 
-            tvTitle.text = movie.title
-            tvOverview.text = movie.overview
-            tvRatings.text = movie.rating.toString()
-            tvVoter.text = movie.voteCount
+            tvTitle.text = movie?.title
+            tvOverview.text = movie?.overview
+            tvRatings.text = movie?.rating.toString()
+            tvVoter.text = movie?.voteCount
         } else if (type == Constant.TYPE_TVSHOW) {
-            tvDate.text = DateHelper.toSimpleString(tvShow.firstAirDate)
+            tvDate.text = DateHelper.toSimpleString(tvShow?.firstAirDate)
             Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${tvShow.poster}")
+                .load("${BuildConfig.IMAGE_URL}${tvShow?.poster}")
                 .listener(ivPoster.requestGlideListener())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .apply(
@@ -195,9 +195,9 @@ class DetailMovieActivity : AppCompatActivity() {
                 .into(ivPoster)
 
             Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${tvShow.backdrop}")
+                .load("${BuildConfig.IMAGE_URL}${tvShow?.backdrop}")
                 .listener(
-                    GlidePalette.with("${BuildConfig.IMAGE_URL}${tvShow.poster}")
+                    GlidePalette.with("${BuildConfig.IMAGE_URL}${tvShow?.poster}")
                         .use(BitmapPalette.Profile.VIBRANT)
                         .intoBackground(toolbar)
                         .crossfade(true)
@@ -209,10 +209,10 @@ class DetailMovieActivity : AppCompatActivity() {
                 )
                 .into(ivBackdrop)
 
-            tvTitle.text = tvShow.title
-            tvOverview.text = tvShow.overview
-            tvRatings.text = tvShow.rating.toString()
-            tvVoter.text = tvShow.voteCount
+            tvTitle.text = tvShow?.title
+            tvOverview.text = tvShow?.overview
+            tvRatings.text = tvShow?.rating.toString()
+            tvVoter.text = tvShow?.voteCount
         } else if (type == Constant.TYPE_FAVORITE) {
             tvDate.text = DateHelper.toSimpleString(favoriteMovie?.releaseDate)
             Glide.with(this)
@@ -252,13 +252,13 @@ class DetailMovieActivity : AppCompatActivity() {
             EspressoIdlingResource.increment()
             if (type == Constant.TYPE_MOVIE) {
                 favoriteMovie = FavoriteMovie(
-                    movie.id, movie.voteCount, movie.poster, movie.backdrop, movie.title,
-                    movie.rating, movie.overview, movie.releaseDate, Constant.TYPE_MOVIE
+                    movie?.id, movie?.voteCount, movie?.poster, movie?.backdrop, movie?.title,
+                    movie?.rating, movie?.overview, movie?.releaseDate, Constant.TYPE_MOVIE
                 )
             } else if (type == Constant.TYPE_TVSHOW) {
                 favoriteMovie = FavoriteMovie(
-                    tvShow.id, tvShow.voteCount, tvShow.poster, tvShow.backdrop, tvShow.title,
-                    tvShow.rating, tvShow.overview, tvShow.firstAirDate, Constant.TYPE_TVSHOW
+                    tvShow?.id, tvShow?.voteCount, tvShow?.poster, tvShow?.backdrop, tvShow?.title,
+                    tvShow?.rating, tvShow?.overview, tvShow?.firstAirDate, Constant.TYPE_TVSHOW
                 )
             }
             viewModel.insert(favoriteMovie!!)
