@@ -7,7 +7,6 @@ import id.dtprsty.movieme.InstantTaskExecutorRule
 import id.dtprsty.movieme.data.remote.BaseResponse
 import id.dtprsty.movieme.data.remote.tvshow.TvShow
 import id.dtprsty.movieme.data.remote.tvshow.TvShowRepository
-import id.dtprsty.movieme.shouldBeInstanceOf
 import junit.framework.Assert
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,7 +57,6 @@ class TvShowViewModelTest : Spek({
 
             Then("Return tv show data correctly") {
                 viewModel.viewModelScope.launch {
-                    viewModel.tvShowResponse.value.shouldBeInstanceOf<BaseResponse<MutableList<TvShow>>>()
                     Mockito.verify(repository).getAiringToday()
                     Assert.assertNotNull(viewModel.tvShowResponse.value)
                     Assert.assertNotNull(viewModel.loadingState.value)

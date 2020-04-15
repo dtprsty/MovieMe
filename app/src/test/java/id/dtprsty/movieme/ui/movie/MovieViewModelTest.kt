@@ -7,7 +7,6 @@ import id.dtprsty.movieme.InstantTaskExecutorRule
 import id.dtprsty.movieme.data.remote.BaseResponse
 import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.movie.MovieRepository
-import id.dtprsty.movieme.shouldBeInstanceOf
 import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,8 +57,6 @@ class MovieViewModelTest : Spek({
 
             Then("Return movie data correctly") {
                 viewModel.viewModelScope.launch {
-                    viewModel.movieResponse.value.shouldBeInstanceOf<BaseResponse<MutableList<Movie>>>()
-                    viewModel.movieHighlight.value.shouldBeInstanceOf<BaseResponse<MutableList<Movie>>>()
                     verify(repository).getNowPlaying()
                     verify(repository).getPopular()
                     assertNotNull(viewModel.movieResponse.value)
