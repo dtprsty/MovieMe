@@ -15,7 +15,7 @@ object DateHelper {
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-        return SimpleDateFormat("E, dd MMM yyyy").format(date)
+        return SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(date)
     }
 
     fun dateToYear(dateString: String?): String {
@@ -26,6 +26,6 @@ object DateHelper {
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-        return SimpleDateFormat("yyyy").format(date)
+        return SimpleDateFormat("yyyy", Locale.getDefault()).format(date)
     }
 }
