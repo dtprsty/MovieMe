@@ -34,4 +34,7 @@
     <string name="most_popular">Most Popular</string>
     <string name="type_placeholder">Movie</string>
     <string name="backdrop">backdrop</string>
+    <string name="movie">Movie</string>
+    <string name="tv_show">TV Show</string>
+    <string name="favorite">Favorite</string>
 </resources>
