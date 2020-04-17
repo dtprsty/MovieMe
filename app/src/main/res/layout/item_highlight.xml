@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_root"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_160sdp">
+    android:layout_height="@dimen/_120sdp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardMovie"
