@@ -82,7 +82,7 @@ class FavoriteFragment : Fragment(), IRecyclerView {
                 R.layout.spinner_item_selected, data
             )
 
-        adapter?.setDropDownViewResource(R.layout.spinner_item_dropdown)
+        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown)
 
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -112,7 +112,7 @@ class FavoriteFragment : Fragment(), IRecyclerView {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-
+                return
             }
         }
     }
