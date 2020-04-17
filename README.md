@@ -9,17 +9,21 @@ Movie catalogue apps with API from The movie db https://developers.themoviedb.or
 
 ### Tech Stack
 1. Kotlin
-2. Rx
-2. [Koin](https://start.insert-koin.io/#/) as Dependency Injection Lib
-3. [Retrofit](https://square.github.io/retrofit/) as Networking Lib
-4. [Groupie](https://github.com/lisawray/groupie) as RecyclerView Lib
-5. sdp ssp
-6. Glide Image Loader
-7. Room database
-8. Kotlin Coroutine
-9. [Spek2 Framework](https://www.spekframework.org/) for unit testing 
-10. [Android Spinkit](https://github.com/ybq/Android-SpinKit) for loading animation
-11. [Timber](https://github.com/JakeWharton/timber) as Logger Lib
+2. MVVM 
+3. Live Data
+4. [Koin](https://start.insert-koin.io/#/) as Dependency Injection Lib
+5. [Retrofit](https://square.github.io/retrofit/) as Networking Lib
+6. [Groupie](https://github.com/lisawray/groupie) as RecyclerView Lib
+7. sdp ssp
+8. Glide Image Loader
+9. Room database
+10. Kotlin Coroutine
+11. [Spek2 Framework](https://www.spekframework.org/) for unit testing 
+12. [Android Spinkit](https://github.com/ybq/Android-SpinKit) for loading animation
+13. [Timber](https://github.com/JakeWharton/timber) as Logger Lib
+
+
+### Reference
 
 ### License: ###
 ~~~~
