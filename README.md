@@ -17,14 +17,14 @@ Movie catalogue apps with API from The movie db https://developers.themoviedb.or
 7. sdp ssp
 8. Glide Image Loader
 9. Room database
-10. Kotlin Coroutine
+10. Kotlin Coroutines
 11. [Spek2 Framework](https://www.spekframework.org/) for unit testing 
 12. [Android Spinkit](https://github.com/ybq/Android-SpinKit) for loading animation
 13. [Timber](https://github.com/JakeWharton/timber) as Logger Lib
 
 
 ### Reference
-1. [Dicoding - Belajar Android Jetpack Pro](https://www.dicoding.com/academies/129)</li>
+1. [Dicoding - Belajar Android Jetpack Pro](https://www.dicoding.com/academies/129)
 2. [Tutorial android : Retrofit dan Coroutines](https://pratamawijaya.com/android/android-retrofit-coroutines/)
 
 ### License: ###
