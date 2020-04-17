@@ -24,6 +24,8 @@ Movie catalogue apps with API from The movie db https://developers.themoviedb.or
 
 
 ### Reference
+1. [Dicoding - Belajar Android Jetpack Pro](https://www.dicoding.com/academies/129)</li>
+2. [Tutorial android : Retrofit dan Coroutines](https://pratamawijaya.com/android/android-retrofit-coroutines/)
 
 ### License: ###
 ~~~~
