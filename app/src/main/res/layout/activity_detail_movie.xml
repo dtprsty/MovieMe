@@ -64,9 +64,36 @@
                         android:id="@+id/ivBackdrop"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_250sdp"
+                        android:alpha="0.7"
                         android:scaleType="fitXY"
                         android:src="@drawable/img_placeholder"
                         tools:ignore="ContentDescription" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom"
+                        android:background="@color/black100" />
+
+                    <LinearLayout
+                        android:id="@+id/btnPlay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/ivPlay"
+                            android:layout_width="@dimen/_50sdp"
+                            android:layout_height="@dimen/_50sdp"
+                            android:layout_gravity="center"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_play_circle_outline_black_24dp"
+                            android:tint="@android:color/white"
+                            tools:ignore="ContentDescription" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -106,7 +133,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.2"
                     android:orientation="vertical"
                     android:padding="16dp">
 
@@ -184,13 +211,25 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvOverview"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/_14ssp" />
+                        android:layout_marginTop="@dimen/_8sdp"
+                        app:cardCornerRadius="@dimen/_4sdp"
+                        app:cardElevation="@dimen/_4sdp"
+                        app:cardMaxElevation="@dimen/_4sdp"
+                        app:cardUseCompatPadding="true">
+
+                        <TextView
+                            android:id="@+id/tvOverview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|end"
+                            android:layout_margin="20dp"
+                            android:textSize="@dimen/_14ssp" />
+
+                    </androidx.cardview.widget.CardView>
+
 
                     <View
                         android:layout_width="match_parent"
@@ -206,7 +245,6 @@
                         android:layout_marginEnd="10dp"
                         android:ellipsize="none"
                         android:gravity="center_vertical"
-                        android:paddingBottom="6dp"
                         android:scrollHorizontally="false"
                         android:text="@string/reviews"
                         android:textColor="@color/color_pink"

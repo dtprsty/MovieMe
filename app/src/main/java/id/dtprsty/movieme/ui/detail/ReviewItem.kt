@@ -10,6 +10,16 @@ class ReviewItem(private val review: Review) : Item() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.tvAuthor.text = review.author
         viewHolder.tvContent.text = review.content
+        var isExpandClick = false
+        viewHolder.itemView.setOnClickListener {
+            if (isExpandClick) {
+                viewHolder.tvContent.maxLines = 4
+                isExpandClick = false
+            } else {
+                viewHolder.tvContent.maxLines = 100
+                isExpandClick = true
+            }
+        }
     }
 
     override fun getLayout(): Int {
