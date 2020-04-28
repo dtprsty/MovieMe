@@ -7,6 +7,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import id.dtprsty.movieme.BuildConfig
@@ -19,8 +20,7 @@ import kotlinx.android.synthetic.main.item_movie.*
 
 class MovieItem(
     private val activity: Activity,
-    private val movie: Movie,
-    private val listener: IRecyclerView
+    private val movie: Movie
 ) : Item() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.tvMovieTitle.text = movie.title
@@ -30,10 +30,12 @@ class MovieItem(
             .centerCrop()
             .dontAnimate()
             .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .apply(
+                RequestOptions.placeholderOf(R.drawable.img_placeholder)
+            )
             .into(viewHolder.ivBackdrop)
 
         viewHolder.cardMovie.setOnClickListener {
-            //listener.onClick(movie)
             val intent = Intent(activity, DetailMovieActivity::class.java).apply {
                 putExtra(DetailMovieActivity.EXTRA_MOVIE, movie)
                 putExtra(DetailMovieActivity.EXTRA_TYPE, Constant.TYPE_MOVIE)

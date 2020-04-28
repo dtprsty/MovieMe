@@ -9,15 +9,12 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import id.dtprsty.movieme.R
-import id.dtprsty.movieme.data.local.FavoriteMovie
-import id.dtprsty.movieme.ui.detail.DetailMovieActivity
 import id.dtprsty.movieme.util.Constant
 import kotlinx.android.synthetic.main.favorite_fragment.*
-import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class FavoriteFragment : Fragment(), IRecyclerView {
+class FavoriteFragment : Fragment() {
 
     private lateinit var favoriteAdapter: FavoriteAdapter
 
@@ -43,7 +40,7 @@ class FavoriteFragment : Fragment(), IRecyclerView {
         viewModel.movieFavorite(Constant.TYPE_MOVIE)
         subscribe()
         setSpinner()
-        favoriteAdapter = FavoriteAdapter(this)
+        favoriteAdapter = FavoriteAdapter(requireActivity())
         setRecyclerView()
     }
 
@@ -64,13 +61,6 @@ class FavoriteFragment : Fragment(), IRecyclerView {
             adapter = favoriteAdapter
             onFlingListener = null
         }
-    }
-
-    override fun onClick(favoriteMovie: FavoriteMovie) {
-        context?.startActivity<DetailMovieActivity>(
-            DetailMovieActivity.EXTRA_MOVIE to favoriteMovie,
-            DetailMovieActivity.EXTRA_TYPE to Constant.TYPE_FAVORITE
-        )
     }
 
     fun setSpinner() {
@@ -116,8 +106,4 @@ class FavoriteFragment : Fragment(), IRecyclerView {
             }
         }
     }
-}
-
-interface IRecyclerView {
-    fun onClick(favoriteMovie: FavoriteMovie)
 }

@@ -37,7 +37,6 @@ class DetailMovieActivity : AppCompatActivity() {
         const val EXTRA_TVSHOW = "extra_tvshow"
         const val EXTRA_TYPE = "type" //Movie or TV Show
         const val EXTRA_POSTER_IMAGE = "detail:poster:image"
-        const val EXTRA_BACKDROP_IMAGE = "detail:backdrop:image"
     }
 
     private val viewModel: DetailViewModel by viewModel()
@@ -157,7 +156,6 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-        ViewCompat.setTransitionName(ivBackdrop, EXTRA_BACKDROP_IMAGE)
         ViewCompat.setTransitionName(ivPoster, EXTRA_POSTER_IMAGE)
         if (type == Constant.TYPE_MOVIE) {
             tvDate.text = DateHelper.toSimpleString(movie?.releaseDate)

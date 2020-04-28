@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/dropdownListPreferredItemHeight"
     android:background="@drawable/abc_spinner_mtrl_am_alpha"
-    android:backgroundTint="@color/colorAccent"
+    android:backgroundTint="@color/color_green"
     android:ellipsize="marquee"
     android:singleLine="true"
-    android:textColor="@color/colorAccent" />
+    android:textColor="@color/color_green" />

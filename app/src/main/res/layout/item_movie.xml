@@ -31,7 +31,8 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/backdrop"
-                android:scaleType="center" />
+                android:scaleType="center"
+                android:src="@drawable/img_placeholder" />
 
             <View
                 android:layout_width="match_parent"

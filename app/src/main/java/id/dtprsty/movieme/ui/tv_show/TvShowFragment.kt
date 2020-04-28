@@ -12,16 +12,12 @@ import androidx.lifecycle.Observer
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import id.dtprsty.movieme.R
-import id.dtprsty.movieme.data.remote.tvshow.TvShow
-import id.dtprsty.movieme.ui.detail.DetailMovieActivity
-import id.dtprsty.movieme.util.Constant
 import id.dtprsty.movieme.util.LoadingState
 import kotlinx.android.synthetic.main.tv_show_fragment.*
-import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
-class TvShowFragment : Fragment(), IRecyclerView {
+class TvShowFragment : Fragment() {
 
     private val viewModel by sharedViewModel<TvShowViewModel>()
     private val groupMovie = GroupAdapter<GroupieViewHolder>()
@@ -52,13 +48,13 @@ class TvShowFragment : Fragment(), IRecyclerView {
     }
 
     private fun subscribe() {
-        viewModel.tvShowResponse?.observe(viewLifecycleOwner, Observer {
+        viewModel.tvShowResponse.observe(viewLifecycleOwner, Observer {
             Timber.d("TV Show $it")
             it?.data?.map {
                 groupMovie.add(
                     TvShowItem(
-                        it,
-                        this@TvShowFragment
+                        requireActivity(),
+                        it
                     )
                 )
             }
@@ -105,7 +101,7 @@ class TvShowFragment : Fragment(), IRecyclerView {
                 R.layout.spinner_item_selected, data
             )
 
-        adapter?.setDropDownViewResource(R.layout.spinner_item_dropdown)
+        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown)
 
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -124,16 +120,4 @@ class TvShowFragment : Fragment(), IRecyclerView {
             }
         }
     }
-
-    override fun onClick(tvshow: TvShow) {
-        context?.startActivity<DetailMovieActivity>(
-            DetailMovieActivity.EXTRA_TVSHOW to tvshow,
-            DetailMovieActivity.EXTRA_TYPE to Constant.TYPE_TVSHOW
-        )
-    }
-
-}
-
-interface IRecyclerView {
-    fun onClick(tvshow: TvShow)
 }

@@ -1,9 +1,14 @@
 package id.dtprsty.movieme.ui.favorite
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,11 +18,13 @@ import com.bumptech.glide.request.RequestOptions
 import id.dtprsty.movieme.BuildConfig
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.data.local.FavoriteMovie
+import id.dtprsty.movieme.ui.detail.DetailMovieActivity
+import id.dtprsty.movieme.util.Constant
 import id.dtprsty.movieme.util.DateHelper
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class FavoriteAdapter internal constructor(
-    private val listener: IRecyclerView
+    private val activity: Activity
 ) :
     PagedListAdapter<FavoriteMovie, FavoriteAdapter.FavoriteViewHolder>(DIFF_CALLBACK) {
 
@@ -53,7 +60,7 @@ class FavoriteAdapter internal constructor(
                 tvMovieTitle.text = movie.title
                 tvYear.text = DateHelper.dateToYear(movie.releaseDate)
                 Glide.with(itemView.context)
-                    .load("${BuildConfig.IMAGE_URL}${movie.backdrop}")
+                    .load("${BuildConfig.IMAGE_URL}${movie.poster}")
                     .centerCrop()
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -63,7 +70,20 @@ class FavoriteAdapter internal constructor(
                     .into(ivBackdrop)
 
                 cardMovie.setOnClickListener {
-                    listener.onClick(movie)
+                    val intent = Intent(activity, DetailMovieActivity::class.java).apply {
+                        putExtra(DetailMovieActivity.EXTRA_MOVIE, movie)
+                        putExtra(DetailMovieActivity.EXTRA_TYPE, Constant.TYPE_FAVORITE)
+                    }
+
+                    val activityOptions =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            activity,
+                            Pair(
+                                ivBackdrop,
+                                DetailMovieActivity.EXTRA_POSTER_IMAGE
+                            )
+                        )
+                    ActivityCompat.startActivity(activity, intent, activityOptions.toBundle())
                 }
             }
         }
