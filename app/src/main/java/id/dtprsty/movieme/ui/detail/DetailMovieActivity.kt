@@ -1,12 +1,15 @@
 package id.dtprsty.movieme.ui.detail
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -33,6 +36,8 @@ class DetailMovieActivity : AppCompatActivity() {
         const val EXTRA_MOVIE = "extra_movie"
         const val EXTRA_TVSHOW = "extra_tvshow"
         const val EXTRA_TYPE = "type" //Movie or TV Show
+        const val EXTRA_POSTER_IMAGE = "detail:poster:image"
+        const val EXTRA_BACKDROP_IMAGE = "detail:backdrop:image"
     }
 
     private val viewModel: DetailViewModel by viewModel()
@@ -152,32 +157,25 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-
+        ViewCompat.setTransitionName(ivBackdrop, EXTRA_BACKDROP_IMAGE)
+        ViewCompat.setTransitionName(ivPoster, EXTRA_POSTER_IMAGE)
         if (type == Constant.TYPE_MOVIE) {
             tvDate.text = DateHelper.toSimpleString(movie?.releaseDate)
-            Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${movie?.poster}")
-                .listener(ivPoster.requestGlideListener())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
-                )
-                .into(ivPoster)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                loadThumbnail("${BuildConfig.IMAGE_URL}${movie?.backdrop}", ivBackdrop)
+            } else {
+                loadFullSizeImage("${BuildConfig.IMAGE_URL}${movie?.backdrop}", ivBackdrop)
+            }
 
             Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${movie?.backdrop}")
-                .listener(
-                    GlidePalette.with("${BuildConfig.IMAGE_URL}${movie?.poster}")
-                        .use(BitmapPalette.Profile.VIBRANT)
-                        .intoBackground(toolbar)
-                        .crossfade(true)
-                )
+                .load("${BuildConfig.IMAGE_URL}${movie?.poster}")
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .apply(
                     RequestOptions.placeholderOf(R.drawable.img_placeholder)
                 )
-                .into(ivBackdrop)
+                .into(ivPoster)
 
             tvTitle.text = movie?.title
             tvOverview.text = movie?.overview
@@ -185,29 +183,21 @@ class DetailMovieActivity : AppCompatActivity() {
             tvVoter.text = movie?.voteCount
         } else if (type == Constant.TYPE_TVSHOW) {
             tvDate.text = DateHelper.toSimpleString(tvShow?.firstAirDate)
-            Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${tvShow?.poster}")
-                .listener(ivPoster.requestGlideListener())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
-                )
-                .into(ivPoster)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                loadThumbnail("${BuildConfig.IMAGE_URL}${tvShow?.backdrop}", ivBackdrop)
+            } else {
+                loadFullSizeImage("${BuildConfig.IMAGE_URL}${tvShow?.backdrop}", ivBackdrop)
+            }
 
             Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${tvShow?.backdrop}")
-                .listener(
-                    GlidePalette.with("${BuildConfig.IMAGE_URL}${tvShow?.poster}")
-                        .use(BitmapPalette.Profile.VIBRANT)
-                        .intoBackground(toolbar)
-                        .crossfade(true)
-                )
+                .load("${BuildConfig.IMAGE_URL}${tvShow?.poster}")
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .apply(
                     RequestOptions.placeholderOf(R.drawable.img_placeholder)
                 )
-                .into(ivBackdrop)
+                .into(ivPoster)
 
             tvTitle.text = tvShow?.title
             tvOverview.text = tvShow?.overview
@@ -215,29 +205,20 @@ class DetailMovieActivity : AppCompatActivity() {
             tvVoter.text = tvShow?.voteCount
         } else if (type == Constant.TYPE_FAVORITE) {
             tvDate.text = DateHelper.toSimpleString(favoriteMovie?.releaseDate)
-            Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
-                .listener(ivPoster.requestGlideListener())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
-                )
-                .into(ivPoster)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                loadThumbnail("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}", ivBackdrop)
+            } else {
+                loadFullSizeImage("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}", ivBackdrop)
+            }
 
             Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}")
-                .listener(
-                    GlidePalette.with("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
-                        .use(BitmapPalette.Profile.VIBRANT)
-                        .intoBackground(toolbar)
-                        .crossfade(true)
-                )
+                .load("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .apply(
                     RequestOptions.placeholderOf(R.drawable.img_placeholder)
                 )
-                .into(ivBackdrop)
+                .into(ivPoster)
 
             tvTitle.text = favoriteMovie?.title
             tvOverview.text = favoriteMovie?.overview
@@ -246,6 +227,34 @@ class DetailMovieActivity : AppCompatActivity() {
         }
 
     }
+
+    fun loadThumbnail(resource: String, imageView: ImageView) {
+        Glide.with(this)
+            .load(resource)
+            .listener(
+                GlidePalette.with("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
+                    .use(BitmapPalette.Profile.VIBRANT)
+                    .intoBackground(toolbar)
+                    .crossfade(true)
+            )
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .into(imageView)
+    }
+
+    fun loadFullSizeImage(resource: String, imageView: ImageView) {
+        Glide.with(this)
+            .load(resource)
+            .listener(
+                GlidePalette.with("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
+                    .use(BitmapPalette.Profile.VIBRANT)
+                    .intoBackground(toolbar)
+                    .crossfade(true)
+            )
+            .listener(ivPoster.requestGlideListener())
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .into(imageView)
+    }
+
 
     private fun addToFav() {
         if (favoriteMovie == null) {

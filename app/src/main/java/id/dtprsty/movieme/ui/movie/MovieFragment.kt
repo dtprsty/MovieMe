@@ -1,5 +1,6 @@
 package id.dtprsty.movieme.ui.movie
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.xwray.groupie.GroupAdapter
@@ -19,7 +23,7 @@ import id.dtprsty.movieme.ui.detail.DetailMovieActivity
 import id.dtprsty.movieme.util.Constant
 import id.dtprsty.movieme.util.LoadingState
 import kotlinx.android.synthetic.main.fragment_movie.*
-import org.jetbrains.anko.startActivity
+import kotlinx.android.synthetic.main.item_movie.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
@@ -93,6 +97,7 @@ class MovieFragment : Fragment(), IRecyclerView {
             it?.data?.map {
                 groupMovie.add(
                     MovieItem(
+                        requireActivity(),
                         it,
                         this@MovieFragment
                     )
@@ -164,10 +169,24 @@ class MovieFragment : Fragment(), IRecyclerView {
     }
 
     override fun onClick(movie: Movie) {
-        context?.startActivity<DetailMovieActivity>(
+        val intent = Intent(activity, DetailMovieActivity::class.java).apply {
+            putExtra(DetailMovieActivity.EXTRA_MOVIE, movie)
+            putExtra(DetailMovieActivity.EXTRA_TYPE, Constant.TYPE_MOVIE)
+        }
+
+        val activityOptions =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                requireActivity(),
+                Pair(
+                    ivBackdrop,
+                    DetailMovieActivity.EXTRA_BACKDROP_IMAGE
+                )
+            )
+        ActivityCompat.startActivity(requireContext(), intent, activityOptions.toBundle())
+        /*context?.startActivity<DetailMovieActivity>(
             DetailMovieActivity.EXTRA_MOVIE to movie,
             DetailMovieActivity.EXTRA_TYPE to Constant.TYPE_MOVIE
-        )
+        )*/
     }
 }
 

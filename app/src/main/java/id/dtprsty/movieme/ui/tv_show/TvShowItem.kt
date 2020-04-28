@@ -16,7 +16,7 @@ class TvShowItem(private val tvShow: TvShow, private val listener: IRecyclerView
         viewHolder.tvMovieTitle.text = tvShow.title
         viewHolder.tvYear.text = DateHelper.dateToYear(tvShow.firstAirDate)
         Glide.with(viewHolder.itemView.context)
-            .load("${BuildConfig.IMAGE_URL}${tvShow.backdrop}")
+            .load("${BuildConfig.IMAGE_URL}${tvShow.poster}")
             .centerCrop()
             .dontAnimate()
             .diskCacheStrategy(DiskCacheStrategy.NONE)

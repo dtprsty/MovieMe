@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,6 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowSharedElementEnterTransition" tools:ignore="NewApi">
+            @transition/change_image_transform
+        </item>
+        <item name="android:windowSharedElementExitTransition" tools:ignore="NewApi">
+            @transition/change_image_transform
+        </item>
     </style>
 
 </resources>
