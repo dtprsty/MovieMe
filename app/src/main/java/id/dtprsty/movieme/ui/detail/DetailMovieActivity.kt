@@ -59,17 +59,21 @@ class DetailMovieActivity : AppCompatActivity() {
     private fun init() {
         type = intent.getStringExtra(EXTRA_TYPE)
         setToolbar()
-        if (type == Constant.TYPE_MOVIE) {
-            movie = intent.getParcelableExtra(EXTRA_MOVIE)
-            viewModel.getMovieReview(movie?.id ?: 0)
-            movieFavorite = viewModel.getMovieLocalById(movie?.id ?: 0)
-            tvReview.visibility = View.VISIBLE
-        } else if (type == Constant.TYPE_TVSHOW) {
-            tvShow = intent.getParcelableExtra(EXTRA_TVSHOW)
-            movieFavorite = viewModel.getMovieLocalById(tvShow?.id ?: 0)
-        } else if (type == Constant.TYPE_FAVORITE) {
-            favoriteMovie = intent.getParcelableExtra(EXTRA_MOVIE)
-            isFavorite = true
+        when (type) {
+            Constant.TYPE_MOVIE -> {
+                movie = intent.getParcelableExtra(EXTRA_MOVIE)
+                viewModel.getMovieReview(movie?.id ?: 0)
+                movieFavorite = viewModel.getMovieLocalById(movie?.id ?: 0)
+                tvReview.visibility = View.VISIBLE
+            }
+            Constant.TYPE_TVSHOW -> {
+                tvShow = intent.getParcelableExtra(EXTRA_TVSHOW)
+                movieFavorite = viewModel.getMovieLocalById(tvShow?.id ?: 0)
+            }
+            Constant.TYPE_FAVORITE -> {
+                favoriteMovie = intent.getParcelableExtra(EXTRA_MOVIE)
+                isFavorite = true
+            }
         }
         subscribe()
         setData()
@@ -133,15 +137,20 @@ class DetailMovieActivity : AppCompatActivity() {
 
     }
 
-    fun setToolbar() {
-        val title = if (type == Constant.TYPE_MOVIE) {
-            "Movie Detail"
-        } else if (type == Constant.TYPE_TVSHOW) {
-            "TV Show Detail"
-        } else if (type == Constant.TYPE_FAVORITE) {
-            "Favorite Detail"
-        } else {
-            "Undefined"
+    private fun setToolbar() {
+        val title = when (type) {
+            Constant.TYPE_MOVIE -> {
+                "Movie Detail"
+            }
+            Constant.TYPE_TVSHOW -> {
+                "TV Show Detail"
+            }
+            Constant.TYPE_FAVORITE -> {
+                "Favorite Detail"
+            }
+            else -> {
+                "Undefined"
+            }
         }
         toolbar.apply {
             this.title = title
@@ -157,76 +166,80 @@ class DetailMovieActivity : AppCompatActivity() {
 
     private fun setData() {
         ViewCompat.setTransitionName(ivPoster, EXTRA_POSTER_IMAGE)
-        if (type == Constant.TYPE_MOVIE) {
-            tvDate.text = DateHelper.toSimpleString(movie?.releaseDate)
+        when (type) {
+            Constant.TYPE_MOVIE -> {
+                tvDate.text = DateHelper.toSimpleString(movie?.releaseDate)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                loadThumbnail("${BuildConfig.IMAGE_URL}${movie?.backdrop}", ivBackdrop)
-            } else {
-                loadFullSizeImage("${BuildConfig.IMAGE_URL}${movie?.backdrop}", ivBackdrop)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    loadThumbnail("${BuildConfig.IMAGE_URL}${movie?.backdrop}", ivBackdrop)
+                } else {
+                    loadFullSizeImage("${BuildConfig.IMAGE_URL}${movie?.backdrop}", ivBackdrop)
+                }
+
+                Glide.with(this)
+                    .load("${BuildConfig.IMAGE_URL}${movie?.poster}")
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .apply(
+                        RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                    )
+                    .into(ivPoster)
+
+                tvTitle.text = movie?.title
+                tvOverview.text = movie?.overview
+                tvRatings.text = movie?.rating.toString()
+                tvVoter.text = movie?.voteCount
             }
+            Constant.TYPE_TVSHOW -> {
+                tvDate.text = DateHelper.toSimpleString(tvShow?.firstAirDate)
 
-            Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${movie?.poster}")
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
-                )
-                .into(ivPoster)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    loadThumbnail("${BuildConfig.IMAGE_URL}${tvShow?.backdrop}", ivBackdrop)
+                } else {
+                    loadFullSizeImage("${BuildConfig.IMAGE_URL}${tvShow?.backdrop}", ivBackdrop)
+                }
 
-            tvTitle.text = movie?.title
-            tvOverview.text = movie?.overview
-            tvRatings.text = movie?.rating.toString()
-            tvVoter.text = movie?.voteCount
-        } else if (type == Constant.TYPE_TVSHOW) {
-            tvDate.text = DateHelper.toSimpleString(tvShow?.firstAirDate)
+                Glide.with(this)
+                    .load("${BuildConfig.IMAGE_URL}${tvShow?.poster}")
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .apply(
+                        RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                    )
+                    .into(ivPoster)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                loadThumbnail("${BuildConfig.IMAGE_URL}${tvShow?.backdrop}", ivBackdrop)
-            } else {
-                loadFullSizeImage("${BuildConfig.IMAGE_URL}${tvShow?.backdrop}", ivBackdrop)
+                tvTitle.text = tvShow?.title
+                tvOverview.text = tvShow?.overview
+                tvRatings.text = tvShow?.rating.toString()
+                tvVoter.text = tvShow?.voteCount
             }
+            Constant.TYPE_FAVORITE -> {
+                tvDate.text = DateHelper.toSimpleString(favoriteMovie?.releaseDate)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    loadThumbnail("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}", ivBackdrop)
+                } else {
+                    loadFullSizeImage("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}", ivBackdrop)
+                }
 
-            Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${tvShow?.poster}")
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
-                )
-                .into(ivPoster)
+                Glide.with(this)
+                    .load("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .apply(
+                        RequestOptions.placeholderOf(R.drawable.img_placeholder)
+                    )
+                    .into(ivPoster)
 
-            tvTitle.text = tvShow?.title
-            tvOverview.text = tvShow?.overview
-            tvRatings.text = tvShow?.rating.toString()
-            tvVoter.text = tvShow?.voteCount
-        } else if (type == Constant.TYPE_FAVORITE) {
-            tvDate.text = DateHelper.toSimpleString(favoriteMovie?.releaseDate)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                loadThumbnail("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}", ivBackdrop)
-            } else {
-                loadFullSizeImage("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}", ivBackdrop)
+                tvTitle.text = favoriteMovie?.title
+                tvOverview.text = favoriteMovie?.overview
+                tvRatings.text = favoriteMovie?.rating.toString()
+                tvVoter.text = favoriteMovie?.voteCount
             }
-
-            Glide.with(this)
-                .load("${BuildConfig.IMAGE_URL}${favoriteMovie?.poster}")
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.img_placeholder)
-                )
-                .into(ivPoster)
-
-            tvTitle.text = favoriteMovie?.title
-            tvOverview.text = favoriteMovie?.overview
-            tvRatings.text = favoriteMovie?.rating.toString()
-            tvVoter.text = favoriteMovie?.voteCount
         }
 
     }
 
-    fun loadThumbnail(resource: String, imageView: ImageView) {
+    private fun loadThumbnail(resource: String, imageView: ImageView) {
         Glide.with(this)
             .load(resource)
             .listener(
@@ -239,7 +252,7 @@ class DetailMovieActivity : AppCompatActivity() {
             .into(imageView)
     }
 
-    fun loadFullSizeImage(resource: String, imageView: ImageView) {
+    private fun loadFullSizeImage(resource: String, imageView: ImageView) {
         Glide.with(this)
             .load(resource)
             .listener(

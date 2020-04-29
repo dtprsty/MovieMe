@@ -32,12 +32,12 @@
             android:id="@+id/tvContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_8sdp"
             android:ellipsize="end"
             android:maxLines="4"
-            android:layout_gravity="center_vertical|end"
             android:textSize="@dimen/_14ssp"
             tools:text="@string/content_placeholder" />
 

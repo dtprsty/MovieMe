@@ -8,7 +8,7 @@ import java.util.*
 object DateHelper {
 
     fun toSimpleString(dateString: String?): String {
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         var date: Date? = null
         try {
             date = dateFormat.parse(dateString)
@@ -19,7 +19,7 @@ object DateHelper {
     }
 
     fun dateToYear(dateString: String?): String {
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         var date: Date? = null
         try {
             date = dateFormat.parse(dateString)

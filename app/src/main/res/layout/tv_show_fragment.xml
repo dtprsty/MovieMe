@@ -46,7 +46,8 @@
             android:paddingRight="14dp"
             android:popupBackground="@android:color/white"
             android:popupElevation="3dp"
-            android:stateListAnimator="@drawable/spinner_animation" />
+            android:stateListAnimator="@drawable/spinner_animation"
+            tools:ignore="PrivateResource" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTvShow"

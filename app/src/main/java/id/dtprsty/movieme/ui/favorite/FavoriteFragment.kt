@@ -63,7 +63,7 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-    fun setSpinner() {
+    private fun setSpinner() {
         val data = resources.getStringArray(R.array.favorite_category)
 
         val adapter =

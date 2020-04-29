@@ -4,9 +4,7 @@
     <string name="movie_year_placeholder">2020</string>
     <string name="movie_rating_placeholder">9.9</string>
     <string name="voter">Voter</string>
-    <string name="see_movie_reviews">See Movie Reviews</string>
     <string name="rating">Rating</string>
-    <string name="select_category">Select Category</string>
     <string name="favorites">Favorite</string>
     <string name="loading">Loading...</string>
     <string name="voter_placeholder">954</string>
@@ -30,12 +28,9 @@
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="most_popular">Most Popular</string>
-    <string name="type_placeholder">Movie</string>
     <string name="backdrop">backdrop</string>
     <string name="movie">Movie</string>
     <string name="tv_show">TV Show</string>
     <string name="favorite">Favorite</string>
-    <string name="watch_trailer">Watch Trailer</string>
 </resources>
