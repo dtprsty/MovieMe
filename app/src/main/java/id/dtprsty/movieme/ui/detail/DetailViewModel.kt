@@ -7,12 +7,15 @@ import com.bumptech.glide.load.HttpException
 import id.dtprsty.movieme.data.local.FavoriteMovie
 import id.dtprsty.movieme.data.local.FavoriteRepository
 import id.dtprsty.movieme.data.remote.BaseResponse
-import id.dtprsty.movieme.data.remote.detail.Review
 import id.dtprsty.movieme.data.remote.detail.DetailRepository
+import id.dtprsty.movieme.data.remote.detail.Review
 import id.dtprsty.movieme.data.remote.detail.Video
 import id.dtprsty.movieme.util.EspressoIdlingResource
 import id.dtprsty.movieme.util.LoadingState
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 import timber.log.Timber
 import java.io.IOException
@@ -40,12 +43,12 @@ class DetailViewModel(
         favoriteRepository.deleteById(movieId)
     }
 
-    fun fetchData(type: String, movieId: Int){
+    fun fetchData(type: String, movieId: Int) {
         EspressoIdlingResource.increment()
         loadingState.postValue(LoadingState.LOADING)
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                try{
+            withContext(Dispatchers.IO) {
+                try {
                     val reviewReq = async { detailRepository.getReviews(type, movieId) }
                     val videoReq = async { detailRepository.getVideos(type, movieId) }
 
@@ -54,7 +57,7 @@ class DetailViewModel(
 
                     reviewResponse.postValue(reviewReq.await())
                     videoResponse.postValue(videoReq.await())
-                }catch (throwable: Exception){
+                } catch (throwable: Exception) {
                     when (throwable) {
                         is IOException -> {
                             loadingState.postValue(LoadingState.error("Network error"))
@@ -71,7 +74,7 @@ class DetailViewModel(
                             loadingState.postValue(LoadingState.error("Unknown error"))
                         }
                     }
-                }finally {
+                } finally {
                     loadingState.postValue(LoadingState.LOADED)
                 }
             }

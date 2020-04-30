@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
@@ -16,9 +15,7 @@ import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.util.LoadingState
-import kotlinx.android.synthetic.main.activity_detail_movie.*
 import kotlinx.android.synthetic.main.fragment_movie.*
-import kotlinx.android.synthetic.main.fragment_movie.rootView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 

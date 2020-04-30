@@ -85,13 +85,13 @@ class DetailMovieActivity : AppCompatActivity() {
         when (type) {
             Constant.TYPE_MOVIE -> {
                 movie = intent.getParcelableExtra(EXTRA_MOVIE)
-                viewModel.fetchData(Constant.TYPE_MOVIE,movie?.id ?: 0)
+                viewModel.fetchData(Constant.TYPE_MOVIE, movie?.id ?: 0)
                 movieFavorite = viewModel.getMovieLocalById(movie?.id ?: 0)
                 tvReview.visibility = View.VISIBLE
             }
             Constant.TYPE_TVSHOW -> {
                 tvShow = intent.getParcelableExtra(EXTRA_TVSHOW)
-                viewModel.fetchData(Constant.TYPE_TVSHOW,tvShow?.id ?: 0)
+                viewModel.fetchData(Constant.TYPE_TVSHOW, tvShow?.id ?: 0)
                 movieFavorite = viewModel.getMovieLocalById(tvShow?.id ?: 0)
             }
             Constant.TYPE_FAVORITE -> {
@@ -250,7 +250,10 @@ class DetailMovieActivity : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     loadThumbnail("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}", ivBackdrop)
                 } else {
-                    loadFullSizeImage("${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}", ivBackdrop)
+                    loadFullSizeImage(
+                        "${BuildConfig.IMAGE_URL}${favoriteMovie?.backdrop}",
+                        ivBackdrop
+                    )
                 }
 
                 Glide.with(this)
@@ -345,8 +348,8 @@ class DetailMovieActivity : AppCompatActivity() {
         }
     }
 
-    private fun openYoutube(){
-        if(videoKey != null){
+    private fun openYoutube() {
+        if (videoKey != null) {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.YT_URL + videoKey))
             startActivity(i)
         }

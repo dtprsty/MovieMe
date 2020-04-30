@@ -1,8 +1,8 @@
 package id.dtprsty.movieme.data.remote
 
-import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.detail.Review
 import id.dtprsty.movieme.data.remote.detail.Video
+import id.dtprsty.movieme.data.remote.movie.Movie
 import id.dtprsty.movieme.data.remote.tvshow.TvShow
 import retrofit2.http.GET
 import retrofit2.http.Path
