@@ -49,17 +49,23 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
                     when (throwable) {
                         is IOException -> {
                             loadingState.postValue(LoadingState.error("Network error"))
+                            Timber.d("error io ex")
                         }
                         is HttpException -> {
                             val code = throwable.statusCode
                             val errorResponse = throwable.message
                             loadingState.postValue(LoadingState.error("Error $code $errorResponse"))
+
+                            Timber.d("error $code $errorResponse")
                         }
                         is JSONException -> {
                             loadingState.postValue(LoadingState.error("Invalid json format"))
+
+                            Timber.d("error invalid json")
                         }
                         else -> {
                             loadingState.postValue(LoadingState.error("Unknown error"))
+                            Timber.d("error unknown")
                         }
                     }
                 } finally {

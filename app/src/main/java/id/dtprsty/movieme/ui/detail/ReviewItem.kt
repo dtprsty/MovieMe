@@ -3,7 +3,7 @@ package id.dtprsty.movieme.ui.detail
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import id.dtprsty.movieme.R
-import id.dtprsty.movieme.data.remote.review.Review
+import id.dtprsty.movieme.data.remote.detail.Review
 import kotlinx.android.synthetic.main.item_review.*
 
 class ReviewItem(private val review: Review) : Item() {

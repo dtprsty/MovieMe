@@ -1,6 +1,8 @@
 package id.dtprsty.movieme.ui.detail
 
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -47,6 +49,7 @@ class DetailMovieActivity : AppCompatActivity() {
     private var favoriteMovie: FavoriteMovie? = null
     private var movie: Movie? = null
     private var tvShow: TvShow? = null
+    private var videoKey: String? = null
     private lateinit var type: String
     private lateinit var movieFavorite: LiveData<FavoriteMovie>
 
@@ -56,27 +59,52 @@ class DetailMovieActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.menu_detail, menu)
+        this.menu = menu
+        setFavorite(menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+            R.id.add_to_favorite -> if (!isFavorite) {
+                addToFav()
+            } else {
+                removeFromFav()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun init() {
         type = intent.getStringExtra(EXTRA_TYPE)
         setToolbar()
         when (type) {
             Constant.TYPE_MOVIE -> {
                 movie = intent.getParcelableExtra(EXTRA_MOVIE)
-                viewModel.getMovieReview(movie?.id ?: 0)
+                viewModel.fetchData(Constant.TYPE_MOVIE,movie?.id ?: 0)
                 movieFavorite = viewModel.getMovieLocalById(movie?.id ?: 0)
                 tvReview.visibility = View.VISIBLE
             }
             Constant.TYPE_TVSHOW -> {
                 tvShow = intent.getParcelableExtra(EXTRA_TVSHOW)
+                viewModel.fetchData(Constant.TYPE_TVSHOW,tvShow?.id ?: 0)
                 movieFavorite = viewModel.getMovieLocalById(tvShow?.id ?: 0)
             }
             Constant.TYPE_FAVORITE -> {
                 favoriteMovie = intent.getParcelableExtra(EXTRA_MOVIE)
+                btnPlay.visibility = View.GONE
                 isFavorite = true
             }
         }
         subscribe()
         setData()
+        btnPlay.setOnClickListener {
+            openYoutube()
+        }
     }
 
     private fun subscribe() {
@@ -91,6 +119,10 @@ class DetailMovieActivity : AppCompatActivity() {
             } else {
                 tvReview.visibility = View.VISIBLE
             }
+        })
+
+        viewModel.videoResponse.observe(this, Observer {
+            videoKey = it.data?.get(0)?.key
         })
 
         if (type != Constant.TYPE_FAVORITE) {
@@ -313,23 +345,10 @@ class DetailMovieActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu_detail, menu)
-        this.menu = menu
-        setFavorite(menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> onBackPressed()
-            R.id.add_to_favorite -> if (!isFavorite) {
-                addToFav()
-            } else {
-                removeFromFav()
-            }
+    private fun openYoutube(){
+        if(videoKey != null){
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.YT_URL + videoKey))
+            startActivity(i)
         }
-        return super.onOptionsItemSelected(item)
     }
 }

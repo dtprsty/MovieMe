@@ -2,7 +2,7 @@ package id.dtprsty.movieme.util
 
 object Constant {
     const val TYPE_MOVIE = "movie"
-    const val TYPE_TVSHOW = "tv_show"
+    const val TYPE_TVSHOW = "tv"
     const val TYPE_FAVORITE = "favorite"
 
     //MOVIE

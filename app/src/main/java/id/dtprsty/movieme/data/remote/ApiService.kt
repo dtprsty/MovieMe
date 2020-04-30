@@ -1,7 +1,8 @@
 package id.dtprsty.movieme.data.remote
 
 import id.dtprsty.movieme.data.remote.movie.Movie
-import id.dtprsty.movieme.data.remote.review.Review
+import id.dtprsty.movieme.data.remote.detail.Review
+import id.dtprsty.movieme.data.remote.detail.Video
 import id.dtprsty.movieme.data.remote.tvshow.TvShow
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,9 +16,10 @@ interface ApiService {
         @Query("api_key") apiKey: String
     ): BaseResponse<MutableList<Movie>>
 
-    @GET("movie/{movie_id}/reviews")
-    suspend fun getMovieReview(
-        @Path("movie_id") movieId: Int,
+    @GET("{type}/{id}/reviews")
+    suspend fun getReviews(
+        @Path("type") type: String,
+        @Path("id") movieId: Int,
         @Query("language") language: String,
         @Query("api_key") apiKey: String
     ): BaseResponse<MutableList<Review>>
@@ -29,4 +31,11 @@ interface ApiService {
         @Query("api_key") apiKey: String
     ): BaseResponse<MutableList<TvShow>>
 
+    @GET("{type}/{id}/videos")
+    suspend fun getVideos(
+        @Path("type") type: String,
+        @Path("id") movieId: Int,
+        @Query("language") language: String,
+        @Query("api_key") apiKey: String
+    ): BaseResponse<MutableList<Video>>
 }

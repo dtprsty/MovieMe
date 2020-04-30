@@ -9,13 +9,16 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import id.dtprsty.movieme.R
 import id.dtprsty.movieme.util.LoadingState
+import kotlinx.android.synthetic.main.activity_detail_movie.*
 import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.android.synthetic.main.fragment_movie.rootView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
@@ -120,11 +123,11 @@ class MovieFragment : Fragment() {
                         progressBar.visibility = View.GONE
                         rootView.visibility = View.VISIBLE
                     }
-                    LoadingState.Status.FAILED -> Toast.makeText(
-                        context,
-                        it.msg,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    LoadingState.Status.FAILED -> {
+                        val snackbar: Snackbar = Snackbar
+                            .make(nestedScrollview, "${it.msg}", Snackbar.LENGTH_LONG)
+                        snackbar.show()
+                    }
                 }
             }
         })
